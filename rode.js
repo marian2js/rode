@@ -188,7 +188,7 @@ var configger = function (conf) {
 
 	// Config Statics
 	if (config.staticsDir) {
-		app.use(express.static(config.staticsDir));
+		rode.app.use(rode.express.static(config.staticsDir));
 	}
 	else {
 		throw new Error('Please add option "staticsDir" to config');
