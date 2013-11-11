@@ -8,7 +8,6 @@ var mongoose = require('mongoose'),
 var db = null;
 
 /**
- * @param env
  * @api private
  */
 var connectMongoose = function () {
@@ -20,6 +19,9 @@ var Mongo = {
 	getDb: function () {
 		if (!db) {
 			db = connectMongoose();
+			mongoose.connection.on('error', function () {
+				console.error('MongoDB not configured, please config or remove Mongo on config/config.js');
+			});
 		}
 		return db;
 	}
