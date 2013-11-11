@@ -1,5 +1,5 @@
 {
-	"name": "Rode",
+	"name": "rode",
 	"description": "Smart Packet-Oriented Boilerplate for Express and Mongoose.",
 	"version": "0.0.1",
 	"author": "Mariano Pardo (Codexar)",
@@ -25,6 +25,9 @@
 	"main": "rode",
 	"scripts": {
 		"prepublish": "npm prune"
+	},
+	"bin": {
+		"express": "./bin/rode"
 	},
 	"engines": {
 		"node": ">= 0.8.0"
