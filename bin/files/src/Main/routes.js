@@ -10,7 +10,18 @@ var mainRouter = rode.getRouter('Main');
 mainRouter.setBase('/');
 
 /**
- * Responds to /hello with MainController.sayHello
+ * Responds to /
+ * With MainController.index
+ */
+mainRouter.add({
+	pattern: '',
+	action: 'index',
+	method: 'get'
+});
+
+/**
+ * Responds to /hello
+ * With MainController.sayHello
  */
 mainRouter.add({
 	pattern: 'hello',

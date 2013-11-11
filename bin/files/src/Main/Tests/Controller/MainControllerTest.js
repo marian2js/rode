@@ -8,6 +8,25 @@ var http = require('http'),
 describe('Main Controller', function () {
 	var config = rode.getConfig();
 
+	it('should respond to /hello with "Hello RodeJS!"', function (done) {
+		var options = {
+			host: config.baseUri,
+			path: '/',
+			port: config.port,
+			method: 'GET'
+		};
+		http.request(options, function (response) {
+			var str = '';
+			response.on('data', function (chunk) {
+				str += chunk;
+			});
+			response.on('end', function () {
+				expect(str).to.contain('Hello RodeJS!');
+				done();
+			});
+		});
+	});
+
 	it('should respond to /hello with "Hello World!"', function (done) {
 		var options = {
 			host: config.baseUri,
