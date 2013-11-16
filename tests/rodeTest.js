@@ -7,7 +7,7 @@ describe('Rode.js', function () {
 	 * Test Rode.js is loaded correctly
 	 */
 	it('should load rode.js', function (done) {
-		expect(rode).to.be.a('object');
+		expect(rode).to.be.an('object');
 		done();
 	});
 
@@ -15,8 +15,8 @@ describe('Rode.js', function () {
 	 * Test Config is loaded
 	 */
 	it('should load App Config', function (done) {
-		var config = rode.getConfig();
-		expect(config).to.be.a('object');
+		var config = rode.getCoreConfig();
+		expect(config).to.be.an('object');
 		expect(config.rootDir).to.be.a('string');
 		expect(config.srcDir).to.be.a('string');
 		done();
@@ -27,38 +27,29 @@ describe('Rode.js', function () {
 	 */
 	it('should load Core Config', function (done) {
 		var config = rode.getCoreConfig();
-		expect(config).to.be.a('object');
+		expect(config).to.be.an('object');
 		expect(config.rootDir).to.be.a('string');
 		expect(config.srcDir).to.be.a('string');
 		done();
 	});
 
-	it('should load App Controller', function (done) {
-		// TODO: Finish me!
-		done();
-	});
-
 	it('should load Core Controller', function (done) {
-		//var ctrl = rode.getCoreController('Abstract');
-		// TODO: Finish me!
-		done();
-	});
-
-	it('should load App Model', function (done) {
-		// TODO: Finish me!
+		var Router = rode.getCoreController('Router');
+		expect(Router).to.be.ok();
 		done();
 	});
 
 	it('should load Core Model', function (done) {
 		var model = rode.getCoreModel('Abstract', 'Model');
-		expect(model).to.be.a('object');
+		expect(model).to.be.an('object');
+		expect(model.extend).to.be.a('function');
 		done();
 	});
 
-	it('should return all App Packages', function (done) {
-		rode.getPackages(function (err, packs) {
+	it('should return all Core Packages', function (done) {
+		rode.getCorePackages(function (err, packs) {
 			expect(err).to.be(null);
-			expect(packs).to.be.a('array');
+			expect(packs).to.be.an('array');
 			done();
 		});
 	});
