@@ -47,7 +47,7 @@ describe('Rode.js', function () {
 	});
 
 	it('should return all Core Packages', function (done) {
-		rode.getCorePackages(function (err, packs) {
+		rode.packages.getAllCore(function (err, packs) {
 			expect(err).to.be(null);
 			expect(packs).to.be.an('array');
 			done();

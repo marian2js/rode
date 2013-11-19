@@ -1,0 +1,308 @@
+#!/usr/bin/env node
+
+/**
+ * Based on Express.
+ * Original Source: https://github.com/visionmedia/express/blob/master/bin/express
+ * License: https://github.com/visionmedia/express/blob/master/LICENSE
+ */
+
+/**
+ * Module dependencies.
+ */
+var program = require('commander'),
+	S = require('string'),
+	os = require('os'),
+	fs = require('extfs'),
+	utils = require('./console-utils'),
+	pkg = require('../package.json'),
+	version = pkg.version;
+
+// CLI
+program._name = 'rode generate';
+program
+	.usage('[options] [dir]')
+	.option('-s, --sessions', 'add session support')
+	.option('-e, --ejs', 'add ejs engine support (defaults to jade)')
+	.option('-J, --jshtml', 'add jshtml engine support (defaults to jade)')
+	.option('-H, --hogan', 'add hogan.js engine support')
+	.option('-c, --css <engine>', 'add stylesheet <engine> support (less|stylus) (defaults to plain css)')
+	.option('-f, --force', 'force on non-empty directory')
+	.parse(process.argv);
+
+// Path
+var path = program.args.shift() || '.';
+var filesPath = __dirname + '/files/generate/';
+var viewsPath = __dirname + '/files/views/'
+
+// end-of-line code
+var eol = os.EOL
+
+// Template engine
+program.template = 'jade';
+if (program.ejs) program.template = 'ejs';
+if (program.jshtml) program.template = 'jshtml';
+if (program.hogan) program.template = 'hjs';
+
+// Accepted Version
+var vers = version.split('.');
+var acceptedVersion = vers[0] + '.' + vers[1] + '.x';
+
+/**
+ * Configs template.
+ */
+var config = {
+	config: fs.readFileSync(filesPath + 'config/config.js').toString(),
+	development: fs.readFileSync(filesPath + 'config/development.js').toString(),
+	production: fs.readFileSync(filesPath + 'config/production.js').toString(),
+	test: fs.readFileSync(filesPath + 'config/test.js').toString()
+};
+
+/**
+ * Src template.
+ */
+var mainDir = filesPath + 'src/Main/';
+var src = {
+	Main: {
+		Controller: {
+			MainController: fs.readFileSync(mainDir + 'Controller/MainController.js').toString()
+		},
+		Model: {
+			Main: fs.readFileSync(mainDir + 'Model/Main.js').toString()
+		},
+		Tests: {
+			Controller: {
+				MainControllerTest: fs.readFileSync(mainDir + 'Tests/Controller/MainControllerTest.js').toString()
+			},
+			Model: {
+				MainTest: fs.readFileSync(mainDir + 'Tests/Model/MainTest.js').toString()
+			}
+		},
+		routes: fs.readFileSync(mainDir + 'routes.js').toString()
+	}
+};
+
+
+/**
+ * Jade layout template.
+ */
+var jadeLayout = S(fs.readFileSync(viewsPath + 'layout.jade').toString()).replaceAll('{{path}}', '');
+
+/**
+ * Jade index template.
+ */
+var jadeIndex = S(fs.readFileSync(viewsPath + 'index.jade').toString()).replaceAll('{{path}}', '');
+
+/**
+ * EJS index template.
+ */
+var ejsIndex = S(fs.readFileSync(viewsPath + 'index.ejs').toString()).replaceAll('{{path}}', '');
+
+/**
+ * JSHTML layout template.
+ */
+var jshtmlLayout = S(fs.readFileSync(viewsPath + 'layout.jshtml').toString()).replaceAll('{{path}}', '');
+
+/**
+ * JSHTML index template.
+ */
+var jshtmlIndex = S(fs.readFileSync(viewsPath + 'index.jshtml').toString()).replaceAll('{{path}}', '');
+
+/**
+ * Hogan.js index template.
+ */
+var hoganIndex = S(fs.readFileSync(viewsPath + 'index.hjs').toString()).replaceAll('{{path}}', '');
+
+/**
+ * Default css template.
+ */
+var css = [
+	'body {'
+	, '  padding: 50px;'
+	, '  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;'
+	, '}'
+	, ''
+	, 'a {'
+	, '  color: #00B7FF;'
+	, '}'
+].join(eol);
+
+/**
+ * Default less template.
+ */
+var less = [
+	'body {'
+	, '  padding: 50px;'
+	, '  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;'
+	, '}'
+	, ''
+	, 'a {'
+	, '  color: #00B7FF;'
+	, '}'
+].join(eol);
+
+/**
+ * Default stylus template.
+ */
+var stylus = [
+	'body'
+	, '  padding: 50px'
+	, '  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif'
+	, 'a'
+	, '  color: #00B7FF'
+].join(eol);
+
+/**
+ * App template.
+ */
+var app = fs.readFileSync(filesPath + 'app.js').toString();
+
+// Generate application
+(function createApplication(path) {
+	fs.isEmpty(path, function(empty){
+		if (empty || program.force) {
+			createApplicationAt(path);
+		} else {
+			program.confirm('destination is not empty, continue? ', function(ok){
+				if (ok) {
+					process.stdin.destroy();
+					createApplicationAt(path);
+				} else {
+					utils.abort('aborting');
+				}
+			});
+		}
+	});
+})(path);
+
+/**
+ * Create application at the given directory `path`.
+ *
+ * @param {String} path
+ */
+function createApplicationAt(path) {
+	console.log();
+	process.on('exit', function(){
+		console.log();
+		console.log('   install dependencies:');
+		console.log('     $ cd %s && npm install', path);
+		console.log();
+		console.log('   run the app:');
+		console.log('     $ node app');
+		console.log();
+	});
+
+	utils.mkdir(path, function(){
+		utils.mkdir(path + '/public');
+		utils.mkdir(path + '/public/javascripts');
+		utils.mkdir(path + '/public/images');
+		utils.mkdir(path + '/public/stylesheets', function(){
+			switch (program.css) {
+				case 'less':
+					utils.write(path + '/public/stylesheets/style.less', less);
+					break;
+				case 'stylus':
+					utils.write(path + '/public/stylesheets/style.styl', stylus);
+					break;
+				default:
+					utils.write(path + '/public/stylesheets/style.css', css);
+			}
+		});
+
+		utils.mkdir(path + '/config', function() {
+			utils.write(path + '/config/config.js', config.config);
+			utils.write(path + '/config/development.js', config.development);
+			utils.write(path + '/config/production.js', config.production);
+			utils.write(path + '/config/test.js', config.test);
+		});
+
+		utils.mkdir(path + '/src/Main', function () {
+			utils.mkdir(path + '/src/Main/Controller', function () {
+				utils.write(path + '/src/Main/Controller/MainController.js', src.Main.Controller.MainController);
+			});
+			utils.mkdir(path + '/src/Main/Model', function () {
+				utils.write(path + '/src/Main/Model/Main.js', src.Main.Model.Main);
+			});
+			utils.mkdir(path + '/src/Main/Tests', function () {
+				utils.mkdir(path + '/src/Main/Tests/Controller', function () {
+					utils.write(path + '/src/Main/Tests/Controller/MainControllerTest.js', src.Main.Tests.Controller.MainControllerTest);
+				});
+				utils.mkdir(path + '/src/Main/Tests/Model', function () {
+					utils.write(path + '/src/Main/Tests/Model/MainTest.js', src.Main.Tests.Model.MainTest);
+				});
+			});
+			utils.write(path + '/src/Main/routes.js', src.Main.routes);
+		});
+
+		utils.mkdir(path + '/views', function(){
+			switch (program.template) {
+				case 'ejs':
+					utils.write(path + '/views/index.ejs', ejsIndex);
+					break;
+				case 'jade':
+					utils.write(path + '/views/layout.jade', jadeLayout);
+					utils.write(path + '/views/index.jade', jadeIndex);
+					break;
+				case 'jshtml':
+					utils.write(path + '/views/layout.jshtml', jshtmlLayout);
+					utils.write(path + '/views/index.jshtml', jshtmlIndex);
+					break;
+				case 'hjs':
+					utils.write(path + '/views/index.hjs', hoganIndex);
+					break;
+
+			}
+		});
+
+		// CSS Engine support
+		switch (program.css) {
+			case 'less':
+				config.config = config.config.replace('{css}', 'less');
+				break;
+			case 'stylus':
+				config.config = config.config.replace('{css}', 'stylus');
+				break;
+			default:
+				config.config = config.config.replace('{css}', '');
+		}
+
+		// Session support
+		app = app.replace('{sess}', program.sessions
+			? eol + 'app.use(rode.express.cookieParser(\'your secret here\'));' + eol + 'app.use(rode.express.session());'
+			: '');
+
+		// Template support
+		config.config = config.config.replace('{ViewsTemplate}', program.template);
+
+		// package.json
+		var pkg = {
+			name: 'application-name'
+			, version: '0.0.1'
+			, private: true
+			, scripts: { start: 'node app.js' }
+			, dependencies: {
+				rode: acceptedVersion,
+				underscore: ">= 1.4 < 2"
+			},
+			devDependencies: {
+				mocha: ">= 1.13 < 2",
+				"expect.js": "latest"
+			}
+		}
+
+		if (program.template) pkg.dependencies[program.template] = '*';
+
+		// CSS Engine support
+		switch (program.css) {
+			case 'less':
+				//pkg.dependencies['less-middleware'] = '*';
+				break;
+			default:
+				if (program.css) {
+					pkg.dependencies[program.css] = '*';
+				}
+		}
+
+		utils.write(path + '/package.json', JSON.stringify(pkg, null, 2));
+		utils.write(path + '/app.js', app);
+	});
+}

@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> @utils.write(title) </title>'
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    @utils.write(body)
+  </body>
+</html>

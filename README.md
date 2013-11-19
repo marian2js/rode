@@ -8,7 +8,7 @@ Smart Packet-Oriented Boilerplate for [Express](http://expressjs.com) and [Mongo
 Install Rode set up your boilerplate:
 
     $ npm install -g rode
-    $ rode --sessions --css stylus --ejs myapp
+    $ rode generate --sessions --css stylus --ejs myapp
 
 Install dependencies:
 
@@ -19,9 +19,9 @@ Start the server:
     $ node app
 
 
-Usage is the same that [Express](http://expressjs.com)
+Usage of `rode generate` is the same that [Express](http://expressjs.com)
 
-    Usage: express [options]
+    Usage: rode generate [options] [dir]
 
     Options:
 
@@ -31,7 +31,7 @@ Usage is the same that [Express](http://expressjs.com)
       -e, --ejs           add ejs engine support (defaults to jade)
       -J, --jshtml        add jshtml engine support (defaults to jade)
       -H, --hogan         add hogan.js engine support
-      -c, --css   add stylesheet  support (less|stylus) (defaults to plain css)
+      -c, --css           add stylesheet  support (less|stylus) (defaults to plain css)
       -f, --force         force on non-empty directory
 
 

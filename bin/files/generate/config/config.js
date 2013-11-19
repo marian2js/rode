@@ -5,7 +5,7 @@ var _ = require('underscore'),
 	path = require('path'),
 	rode = require('rode');
 
-var rootDir = rode.getRootDir();
+var rootDir = rode.getRootPath();
 
 var config = {
 	baseUri: 'http://localhost',
