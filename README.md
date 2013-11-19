@@ -35,6 +35,15 @@ Usage of `rode generate` is the same that [Express](http://expressjs.com)
       -f, --force         force on non-empty directory
 
 
+## Packages
+
+A package (or bundle) is a component of your application with its own MVC.
+
+You can simply create a new package with the command:
+
+    $ rode new:package PackageName
+
+
 ## Models
 
 Models on Rode are modules really extensibles.
