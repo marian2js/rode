@@ -5,14 +5,13 @@ var _ = require('underscore'),
 	path = require('path'),
 	rode = require('rode');
 
-var rootDir = rode.getRootPath();
+var rootPath = rode.getRootPath() || path.resolve(__dirname, '../') + '/';
 
 var config = {
 	baseUri: 'http://localhost',
 	port: process.env.PORT || 3000,
-	rootDir: rootDir,
-	srcDir: path.join(rootDir, 'src'),
-	staticsDir: path.join(rootDir, 'public'),
+	srcDir: path.join(rootPath, 'src'),
+	staticsDir: path.join(rootPath, 'public'),
 	mongo: {
 		uri: 'mongodb://localhost/app_name',
 		options: {},
@@ -20,7 +19,7 @@ var config = {
 	},
 	db: process.env.MONGOHQ_URL,
 	views: {
-		dir: rootDir + 'views',
+		dir: rootPath + 'views',
 		engine: '{ViewsTemplate}'
 	},
 	favicon: rode.express.favicon(),
@@ -33,7 +32,7 @@ module.exports = function (env) {
 	if (!env) {
 		env = process.env.NODE_ENV || 'development';
 	}
-	_.extend(config, require(rootDir + 'config/' + env) || {});
+	_.extend(config, require(rootPath + 'config/' + env) || {});
 
 	return config;
 };

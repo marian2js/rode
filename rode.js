@@ -10,6 +10,7 @@ var rode = (function () {
 	var config;
 	var coreConfig;
 	var rootPath;
+	var started = false;
 
 	self.express = require('express');
 	self.app = self.express();
@@ -30,6 +31,7 @@ var rode = (function () {
 		}
 		createRoutes(function () {
 			cb(null);
+			started = true;
 		});
 	};
 
@@ -50,6 +52,9 @@ var rode = (function () {
 	 * @returns {string}
 	 */
 	self.getRootPath = function () {
+		if (!rootPath) {
+			return null;
+		}
 		return _path.normalize(rootPath + '/');
 	};
 
@@ -187,6 +192,15 @@ var rode = (function () {
 	 */
 	self.setBinCommand = function (bin) {
 		binCommand = bin;
+	};
+
+	/**
+	 * Check if rode is started
+	 *
+	 * @returns {boolean}
+	 */
+	self.isStarted = function () {
+		return started;
 	};
 
 	/**
