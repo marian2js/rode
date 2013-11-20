@@ -2,8 +2,7 @@
  * Module dependencies
  */
 var _path = require('path'),
-	http = require('http')
-	soynode = require('soynode');
+	http = require('http');
 
 var rode = (function () {
 	var self = {};

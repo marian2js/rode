@@ -233,7 +233,9 @@ function createApplicationAt(path) {
 			}
 		}
 
-		if (program.template) pkg.dependencies[program.template] = '*';
+		if (program.template && program.template !== 'soy') {
+			pkg.dependencies[program.template] = '*';
+		}
 
 		// CSS Engine support
 		switch (program.css) {
