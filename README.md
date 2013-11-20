@@ -29,9 +29,9 @@ Usage of `rode generate` is the same that [Express](http://expressjs.com)
       -V, --version       output the version number
       -s, --sessions      add session support
       -e, --ejs           add ejs engine support (defaults to jade)
-      -J, --jshtml        add jshtml engine support (defaults to jade)
       -H, --hogan         add hogan.js engine support
-      -c, --css           add stylesheet  support (less|stylus) (defaults to plain css)
+      -S, --soy           add Google Closure Templates engine support
+      -c, --css           add stylesheet support (less|stylus) (defaults to plain css)
       -f, --force         force on non-empty directory
 
 
@@ -69,12 +69,13 @@ Employee.sayHello(); // Hello Models!
 
 ## Models with Mongoose
 
+In this example we first define Person Model and their Schema:
+
 ```js
 var rode = require('rode');
 
 var Model = rode.getBaseModel();
 
-// Define Person Model and Schema
 var Person = Model.extend({
   name: 'Person',
 });
@@ -88,16 +89,22 @@ Person.setSchema({
     default: 0
   }
 });
+```
 
-// Define Employee Model and Schema extending Person
+Now define Employee Model and their Schema extending from Person:
+
+```js
 var Employee = Person.extend({
   name: 'Employee'
 });
 Employee.setSchema({
   company: 'String'
 });
+```
 
-// Create same persons
+You can create some persons and employees:
+
+```js
 var john = new Person.model({
   name: 'John',
   age: 40
@@ -107,7 +114,11 @@ var mariano = new Employee.model({
   age: '22',
   company: 'Codexar'
 });
+```
 
+And you can still using any mongoose method:
+
+```js
 // Save John on Persons
 john.save(function (err) {
   // Save Mariano on Employees
@@ -169,3 +180,13 @@ mainRouter.add({
   method: 'get' // Defaults 'all'
 });
 ```
+
+## Templates engines
+
+Rode supports all this templates engines:
+
+* Jade (default template)
+* Ejs
+* Hogan.js
+* Google Closure Templates
+

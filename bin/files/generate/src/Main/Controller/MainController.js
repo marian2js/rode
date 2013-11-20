@@ -12,6 +12,7 @@ var MainController = {
 	 */
 	index: function (req, res) {
 		res.render('index', {
+			//{{render}}//
 			title: 'Hello RodeJS!'
 		});
 	},
@@ -21,6 +22,7 @@ var MainController = {
 	 */
 	sayHello: function (req, res) {
 		res.render('index', {
+			//{{render}}//
 			title: 'Hello World!'
 		});
 	}

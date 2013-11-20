@@ -2,7 +2,8 @@
  * Module dependencies
  */
 var _path = require('path'),
-	http = require('http');
+	http = require('http')
+	soynode = require('soynode');
 
 var rode = (function () {
 	var self = {};
@@ -39,7 +40,10 @@ var rode = (function () {
 	 * @param cb
 	 */
 	self.startServer = function (cb) {
-		http.createServer(self.app).listen(self.app.get('port'), cb);
+		self.view.compile(function (err) {
+			if (err) throw err;
+			http.createServer(self.app).listen(self.app.get('port'), cb);
+		});
 	};
 
 	/**
@@ -198,9 +202,9 @@ var rode = (function () {
 		self.app.set('port', config.port || 3000);
 
 		// Config Views
+		self.view = self.getCoreController('Views');
 		if (config.views) {
-			self.app.set('views', config.views.dir || '');
-			self.app.set('view engine', config.views.engine || 'jade');
+			self.view.configEngine();
 		}
 
 		// Config Favicon

@@ -1,5 +1,6 @@
 var _path = require('path'),
 	mkdirp = require('mkdirp'),
+	S = require('string'),
 	fs = require('extfs');
 
 var utils = (function () {
@@ -60,6 +61,86 @@ var utils = (function () {
 	 */
 	self.errorNotRode = function (path) {
 		self.abort('Can not find a Rode installation in ' + _path.resolve(path));
+	};
+
+	/**
+	 * Write templates when generate app or package
+	 *
+	 * @param path
+	 * @param engine
+	 * @param [data]
+	 */
+	self.writeViews = function (path, engine, data) {
+		self.mkdir(path, function() {
+			var viewsPath = __dirname + '/files/views/';
+			var index;
+
+			if (!data) {
+				data = {
+					path: '',
+					pack: ''
+				};
+			}
+			switch (engine) {
+				case 'ejs':
+					self.write(_path.normalize(path + '/index.ejs'), renderViews(viewsPath + 'index.ejs', data));
+					break;
+				case 'jade':
+					self.write(_path.normalize(path + '/layout.jade'), renderViews(viewsPath + 'layout.jade', data));
+					self.write(_path.normalize(path + '/index.jade'), renderViews(viewsPath + 'index.jade', data));
+					break;
+				case 'jshtml':
+					throw new Error('jshtml not supported yet!');
+					break;
+				case 'hjs':
+					self.write(_path.normalize(path + '/index.hjs'), renderViews(viewsPath + 'index.hjs', data));
+					break;
+				case 'soy':
+					self.write(_path.normalize(path + '/index.soy'), renderViews(viewsPath + 'index.soy', data));
+					break;
+			}
+		});
+	};
+
+	/**
+	 *
+	 * @param path
+	 * @param data
+	 * @returns {string}
+	 */
+	var renderViews = function (path, data) {
+		return S(fs.readFileSync(path).toString())
+			.replaceAll('{{path}}', data.path)
+			.replaceAll('{{pack.}}', data.pack ? data.pack + '.' : '');
+	};
+
+	/**
+	 * Write Sources
+	 *
+	 * @param path
+	 * @param pack
+	 * @param src
+	 */
+	self.writeSources = function (path, pack, src) {
+		var srcPath = _path.normalize(path + '/' + pack);
+		var testPath = srcPath + '/Tests';
+		utils.mkdir(srcPath, function () {
+			utils.mkdir(srcPath + '/Controller', function () {
+				utils.write(srcPath + '/Controller/MainController.js', src.Controller.MainController);
+			});
+			utils.mkdir(srcPath + '/Model', function () {
+				utils.write(srcPath + '/Model/' + pack + '.js', src.Model.Main);
+			});
+			utils.mkdir(testPath, function () {
+				utils.mkdir(testPath + '/Controller', function () {
+					utils.write(testPath + '/Controller/MainControllerTest.js', src.Tests.Controller.MainControllerTest);
+				});
+				utils.mkdir(testPath + '/Model', function () {
+					utils.write(testPath + '/Model/' + pack + 'Test.js', src.Tests.Model.MainTest);
+				});
+			});
+			utils.write(srcPath + '/routes.js', src.routes);
+		});
 	};
 
 	/**

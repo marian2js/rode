@@ -15,6 +15,7 @@ var MainController = {
 	 */
 	index: function (req, res) {
 		res.render('__PACKAGE__/index', {
+			//{{render}}//
 			title: 'Index of __PACKAGE__'
 		});
 	}

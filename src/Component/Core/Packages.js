@@ -136,9 +136,9 @@ function addPackage (pack, force) {
 	});
 
 	// Create Views
-	utils.mkdir(viewPath, function () {
-		var viewFile = S(fs.readFileSync(filesViewPath + 'index.' + rode.getConfig().views.engine).toString()).replaceAll('{{path}}', '../');
-		utils.write(viewPath + '/index.' + rode.getConfig().views.engine, viewFile);
+	utils.writeViews(viewPath, rode.getConfig().views.engine, {
+		path: '../',
+		pack: pack
 	});
 
 	// Create Tests
@@ -151,9 +151,18 @@ function addPackage (pack, force) {
 }
 
 function renderTemplate (pack, template) {
-	return S(template)
+	template = S(template)
 		.replaceAll('__PACKAGE__', pack)
 		.replaceAll('__lowerPACKAGE__', pack.toLowerCase());
+
+	if (rode.getConfig().views.engine === 'soy') {
+		template = template.replaceAll('//{{render}}//', 'function: \'index\',');
+	}
+	else {
+		template = template.replaceAll('//{{render}}//', '');
+	}
+
+	return template;
 }
 
 module.exports = packages;

@@ -23,8 +23,9 @@ program
 	.usage('[options] [dir]')
 	.option('-s, --sessions', 'add session support')
 	.option('-e, --ejs', 'add ejs engine support (defaults to jade)')
-	.option('-J, --jshtml', 'add jshtml engine support (defaults to jade)')
+	//.option('-J, --jshtml', 'add jshtml engine support (defaults to jade)')
 	.option('-H, --hogan', 'add hogan.js engine support')
+	.option('-S, --soy', 'add Google Closure Templates engine support')
 	.option('-c, --css <engine>', 'add stylesheet <engine> support (less|stylus) (defaults to plain css)')
 	.option('-f, --force', 'force on non-empty directory')
 	.parse(process.argv);
@@ -32,7 +33,6 @@ program
 // Path
 var path = program.args.shift() || '.';
 var filesPath = __dirname + '/files/generate/';
-var viewsPath = __dirname + '/files/views/'
 
 // end-of-line code
 var eol = os.EOL
@@ -40,8 +40,9 @@ var eol = os.EOL
 // Template engine
 program.template = 'jade';
 if (program.ejs) program.template = 'ejs';
-if (program.jshtml) program.template = 'jshtml';
+//if (program.jshtml) program.template = 'jshtml';
 if (program.hogan) program.template = 'hjs';
+if (program.soy) program.template = 'soy';
 
 // Accepted Version
 var vers = version.split('.');
@@ -80,37 +81,12 @@ var src = {
 		routes: fs.readFileSync(mainDir + 'routes.js').toString()
 	}
 };
-
-
-/**
- * Jade layout template.
- */
-var jadeLayout = S(fs.readFileSync(viewsPath + 'layout.jade').toString()).replaceAll('{{path}}', '');
-
-/**
- * Jade index template.
- */
-var jadeIndex = S(fs.readFileSync(viewsPath + 'index.jade').toString()).replaceAll('{{path}}', '');
-
-/**
- * EJS index template.
- */
-var ejsIndex = S(fs.readFileSync(viewsPath + 'index.ejs').toString()).replaceAll('{{path}}', '');
-
-/**
- * JSHTML layout template.
- */
-var jshtmlLayout = S(fs.readFileSync(viewsPath + 'layout.jshtml').toString()).replaceAll('{{path}}', '');
-
-/**
- * JSHTML index template.
- */
-var jshtmlIndex = S(fs.readFileSync(viewsPath + 'index.jshtml').toString()).replaceAll('{{path}}', '');
-
-/**
- * Hogan.js index template.
- */
-var hoganIndex = S(fs.readFileSync(viewsPath + 'index.hjs').toString()).replaceAll('{{path}}', '');
+if (program.template === 'soy') {
+	src.Main.Controller.MainController = S(src.Main.Controller.MainController).replaceAll('//{{render}}//', 'function: \'index\',');
+}
+else {
+	src.Main.Controller.MainController = S(src.Main.Controller.MainController).replaceAll('//{{render}}//', '');
+}
 
 /**
  * Default css template.
@@ -215,43 +191,11 @@ function createApplicationAt(path) {
 			utils.write(path + '/config/test.js', config.test);
 		});
 
-		utils.mkdir(path + '/src/Main', function () {
-			utils.mkdir(path + '/src/Main/Controller', function () {
-				utils.write(path + '/src/Main/Controller/MainController.js', src.Main.Controller.MainController);
-			});
-			utils.mkdir(path + '/src/Main/Model', function () {
-				utils.write(path + '/src/Main/Model/Main.js', src.Main.Model.Main);
-			});
-			utils.mkdir(path + '/src/Main/Tests', function () {
-				utils.mkdir(path + '/src/Main/Tests/Controller', function () {
-					utils.write(path + '/src/Main/Tests/Controller/MainControllerTest.js', src.Main.Tests.Controller.MainControllerTest);
-				});
-				utils.mkdir(path + '/src/Main/Tests/Model', function () {
-					utils.write(path + '/src/Main/Tests/Model/MainTest.js', src.Main.Tests.Model.MainTest);
-				});
-			});
-			utils.write(path + '/src/Main/routes.js', src.Main.routes);
-		});
+		// Write Sources
+		utils.writeSources(path + '/src', 'Main', src.Main);
 
-		utils.mkdir(path + '/views', function(){
-			switch (program.template) {
-				case 'ejs':
-					utils.write(path + '/views/index.ejs', ejsIndex);
-					break;
-				case 'jade':
-					utils.write(path + '/views/layout.jade', jadeLayout);
-					utils.write(path + '/views/index.jade', jadeIndex);
-					break;
-				case 'jshtml':
-					utils.write(path + '/views/layout.jshtml', jshtmlLayout);
-					utils.write(path + '/views/index.jshtml', jshtmlIndex);
-					break;
-				case 'hjs':
-					utils.write(path + '/views/index.hjs', hoganIndex);
-					break;
-
-			}
-		});
+		// Write Views
+		utils.writeViews(path + '/views', program.template);
 
 		// CSS Engine support
 		switch (program.css) {
@@ -294,7 +238,8 @@ function createApplicationAt(path) {
 		// CSS Engine support
 		switch (program.css) {
 			case 'less':
-				//pkg.dependencies['less-middleware'] = '*';
+				break;
+			case 'soy':
 				break;
 			default:
 				if (program.css) {
