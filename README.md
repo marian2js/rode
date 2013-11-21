@@ -5,9 +5,9 @@ Smart Packet-Oriented Boilerplate for [Express](http://expressjs.com) and [Mongo
 
 ## Quick Start
 
-Install Rode set up your boilerplate:
+Installing Rode and setting up your application:
 
-    $ npm install -g rode bower grunt-cli
+    # npm install -g rode bower grunt-cli
     $ rode generate --sessions --css stylus --ejs myapp
 
 Install dependencies:
@@ -19,7 +19,7 @@ Start the server:
     $ node app
 
 
-Usage of `rode generate` is the same that [Express](http://expressjs.com)
+The usage of `rode generate` is nearly the same that [Express](http://expressjs.com)
 
     Usage: rode generate [options] [dir]
 
@@ -196,4 +196,5 @@ Rode supports all this templates engines:
 * [Ejs](http://embeddedjs.com/)
 * [Hogan.js](http://twitter.github.io/hogan.js/)
 * [Google Closure Templates](https://developers.google.com/closure/templates/)
+* Since you still can use express, you can use any template that express support
 
