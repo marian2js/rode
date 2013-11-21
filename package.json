@@ -23,7 +23,9 @@
   },
   "devDependencies": {
     "mocha": ">= 1.13 < 2",
-    "expect.js": "latest"
+    "expect.js": "latest",
+	"grunt-mocha-test": "~0.7.0",
+	"grunt": "latest"
   },
   "repository": "git://github.com/codexar/rode",
   "main": "rode",
@@ -32,8 +34,8 @@
   },
   "bin": {
     "rode": "./bin/rode",
-	"rode-generate": "./bin/rode-generate",
-	"rode-new:package": "./bin/rode-new:package"
+    "rode-generate": "./bin/rode-generate",
+    "rode-new:package": "./bin/rode-new:package"
   },
   "engines": {
     "node": ">= 0.8.0"

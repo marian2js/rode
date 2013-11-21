@@ -48,6 +48,7 @@ var rode = (function () {
 	};
 
 	/**
+	 * Get Root Path
 	 *
 	 * @returns {string}
 	 */
@@ -56,6 +57,15 @@ var rode = (function () {
 			return null;
 		}
 		return _path.normalize(rootPath + '/');
+	};
+
+	/**
+	 * Set Root Path
+	 *
+	 * @param path
+	 */
+	self.setRootPath = function (path) {
+		rootPath = path;
 	};
 
 	/**
@@ -81,14 +91,19 @@ var rode = (function () {
 	/**
 	 *
 	 * @param [env]
+	 * @param [force]
 	 * @returns {Object}
 	 */
-	self.getCoreConfig = function (env) {
+	self.getCoreConfig = function (env, force) {
 		if (!coreConfig) {
 			coreConfig = require(self.getCorePath() + 'config/config')(env);
 
 			// Config Packages as soon as we have CoreConfig
 			self.packages = require(self.getCoreConfig().srcDir + '/Component/Core/Packages');
+		}
+		if (force) {
+			config = coreConfig;
+			self.getDb();
 		}
 		return coreConfig;
 	};

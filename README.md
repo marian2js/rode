@@ -7,7 +7,7 @@ Smart Packet-Oriented Boilerplate for [Express](http://expressjs.com) and [Mongo
 
 Install Rode set up your boilerplate:
 
-    $ npm install -g rode
+    $ npm install -g rode bower grunt-cli
     $ rode generate --sessions --css stylus --ejs myapp
 
 Install dependencies:
@@ -181,12 +181,19 @@ mainRouter.add({
 });
 ```
 
+## Tests
+
+You can run all the test with the command:
+
+    $ grunt test
+
+
 ## Templates engines
 
 Rode supports all this templates engines:
 
-* Jade (default template)
-* Ejs
-* Hogan.js
-* Google Closure Templates
+* [Jade](http://jade-lang.com/) (default template)
+* [Ejs](http://embeddedjs.com/)
+* [Hogan.js](http://twitter.github.io/hogan.js/)
+* [Google Closure Templates](https://developers.google.com/closure/templates/)
 

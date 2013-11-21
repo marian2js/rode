@@ -128,6 +128,19 @@ var stylus = [
 ].join(eol);
 
 /**
+ * Bower
+ */
+var bower = {
+	json: fs.readFileSync(filesPath + 'bower.json').toString(),
+	rc: fs.readFileSync(filesPath + '.bowerrc').toString()
+};
+
+/**
+ * Grunt
+ */
+var grunt = fs.readFileSync(filesPath + 'Gruntfile.js').toString();
+
+/**
  * App template.
  */
 var app = fs.readFileSync(filesPath + 'app.js').toString();
@@ -169,6 +182,7 @@ function createApplicationAt(path) {
 
 	utils.mkdir(path, function(){
 		utils.mkdir(path + '/public');
+		utils.mkdir(path + '/public/vendor');
 		utils.mkdir(path + '/public/javascripts');
 		utils.mkdir(path + '/public/images');
 		utils.mkdir(path + '/public/stylesheets', function(){
@@ -217,6 +231,13 @@ function createApplicationAt(path) {
 		// Template support
 		config.config = config.config.replace('{ViewsTemplate}', program.template);
 
+		// Write Bower
+		utils.write(path + '/bower.json', bower.json);
+		utils.write(path + '/.bowerrc', bower.rc);
+
+		// Write Grunt
+		utils.write(path + '/Gruntfile.js', grunt);
+
 		// package.json
 		var pkg = {
 			name: 'application-name'
@@ -229,9 +250,11 @@ function createApplicationAt(path) {
 			},
 			devDependencies: {
 				mocha: ">= 1.13 < 2",
-				"expect.js": "latest"
+				"expect.js": "latest",
+				"grunt-mocha-test": "~0.7.0",
+				"grunt": "latest"
 			}
-		}
+		};
 
 		if (program.template && program.template !== 'soy') {
 			pkg.dependencies[program.template] = '*';

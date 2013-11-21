@@ -3,8 +3,6 @@ var expect = require('expect.js'),
 	rode = require('../../../../rode');
 
 var Model = rode.getBaseModel();
-mongoose.connect('mongodb://localhost/rodetest');
-
 
 describe('Model', function () {
 	it('should be extensible', function (done) {
