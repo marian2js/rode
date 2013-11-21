@@ -18,10 +18,15 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('prepareTest', 'Test Environment', function() {
+		var done = this.async();
 		rode.setRootPath(__dirname);
 		rode.getCoreConfig('test');
 		rode.getConfig('test');
-		rode.start(__dirname, function(){});
+		rode.start(__dirname, function() {
+			rode.startServer(function () {
+				done();
+			});
+		});
 	});
 
 	// Run tests //

@@ -10,7 +10,7 @@ describe('Main Controller', function () {
 
 	it('should respond to /hello with "Hello RodeJS!"', function (done) {
 		var options = {
-			host: config.baseUri,
+			host: config.host,
 			path: '/',
 			port: config.port,
 			method: 'GET'
@@ -18,18 +18,18 @@ describe('Main Controller', function () {
 		http.request(options, function (response) {
 			var str = '';
 			response.on('data', function (chunk) {
-				str += chunk;
+				str += chunk.toString();
 			});
 			response.on('end', function () {
 				expect(str).to.contain('Hello RodeJS!');
 				done();
 			});
-		});
+		}).end();
 	});
 
 	it('should respond to /hello with "Hello World!"', function (done) {
 		var options = {
-			host: config.baseUri,
+			host: config.host,
 			path: '/hello',
 			port: config.port,
 			method: 'GET'
@@ -37,13 +37,13 @@ describe('Main Controller', function () {
 		http.request(options, function (response) {
 			var str = '';
 			response.on('data', function (chunk) {
-				str += chunk;
+				str += chunk.toString();
 			});
 			response.on('end', function () {
 				expect(str).to.contain('Hello World!');
 				done();
 			});
-		});
+		}).end();
 	});
 });
 

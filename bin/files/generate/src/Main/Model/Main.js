@@ -31,3 +31,5 @@ Main.schema.path('name').validate(function (name) {
  * Compile Main Module (only needed if use MongoDB)
  */
 Main.compile();
+
+module.exports = Main;

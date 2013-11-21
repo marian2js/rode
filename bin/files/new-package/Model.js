@@ -31,3 +31,5 @@ __PACKAGE__.schema.path('name').validate(function (name) {
  * Compile __PACKAGE__ Module (only needed if use MongoDB)
  */
 __PACKAGE__.compile();
+
+module.exports = __PACKAGE__;

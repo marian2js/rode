@@ -229,6 +229,11 @@ var rode = (function () {
 		// Config Port
 		self.app.set('port', config.port || 3000);
 
+		// Config Host
+		if (config.baseUri) {
+			config.host = config.baseUri.replace('http', '').replace('https', '').replace('://', '');
+		}
+
 		// Config Views
 		self.view = self.getCoreController('Views');
 		if (config.views) {
