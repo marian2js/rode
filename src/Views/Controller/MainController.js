@@ -25,11 +25,15 @@ var MainController = (function () {
 	self.getView = function () {
 		self.getEngine();
 		if (!View) {
-			if (engine === 'soy') {
-				View = rode.getCoreModel('Views', 'SoyView');
-			}
-			else {
-				View = rode.getCoreModel('Views');
+			switch (engine) {
+				case 'ejs':
+					View = rode.getCoreModel('Views', 'EjsView');
+					break;
+				case 'soy':
+					View = rode.getCoreModel('Views', 'SoyView');
+					break;
+				default:
+					View = rode.getCoreModel('Views');
 			}
 		}
 		return View;

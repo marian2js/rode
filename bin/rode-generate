@@ -225,7 +225,8 @@ function createApplicationAt(path) {
 
 		// Session support
 		app = app.replace('{sess}', program.sessions
-			? eol + 'app.use(rode.express.cookieParser(\'your secret here\'));' + eol + 'app.use(rode.express.session());'
+			? eol + '   app.use(rode.express.cookieParser(\'your secret here\'));' +
+			  eol + '    app.use(rode.express.session());'
 			: '');
 
 		// Template support
@@ -256,15 +257,9 @@ function createApplicationAt(path) {
 			}
 		};
 
-		if (program.template && program.template !== 'soy') {
-			pkg.dependencies[program.template] = '*';
-		}
-
 		// CSS Engine support
 		switch (program.css) {
 			case 'less':
-				break;
-			case 'soy':
 				break;
 			default:
 				if (program.css) {

@@ -10,7 +10,7 @@ Smart Packet-Oriented Framework for [Express](http://expressjs.com) and [Mongoos
 - [Models](#models)
 - [Models with Mongoose](#models-with-mongoose)
 - [Controllers](#controllers)
-- [Restful APIs With Rode](#restful-apis-with-rode)
+- [Restful APIs](#restful-apis)
 - [Tests](#tests)
 - [Templates engines](#templates-engines)
 
@@ -200,7 +200,7 @@ mainRouter.add({
 });
 ```
 
-## <a name="restful-apis-with-rode"></a>Restful APIs With Rode
+## <a name="restful-apis"></a>Restful APIs
 
 Make a Restful API can not be more easy.
 Create your package with the command:
@@ -261,7 +261,7 @@ You can run all the test with the command:
 Rode supports all this templates engines:
 
 * [Jade](http://jade-lang.com/) (default template)
-* [Ejs](http://embeddedjs.com/)
+* [Ejs](http://embeddedjs.com/) (using [ejs-locals](https://github.com/RandomEtc/ejs-locals))
 * [Hogan.js](http://twitter.github.io/hogan.js/)
 * [Google Closure Templates](https://developers.google.com/closure/templates/)
 * Since you still can use express, you can use any template that express support

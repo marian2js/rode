@@ -84,6 +84,7 @@ var utils = (function () {
 			switch (engine) {
 				case 'ejs':
 					self.write(_path.normalize(path + '/index.ejs'), renderViews(viewsPath + 'index.ejs', data));
+					self.write(_path.normalize(path + '/layout.ejs'), renderViews(viewsPath + 'layout.ejs', data));
 					break;
 				case 'jade':
 					self.write(_path.normalize(path + '/layout.jade'), renderViews(viewsPath + 'layout.jade', data));
