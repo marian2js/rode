@@ -10,6 +10,7 @@ Smart Packet-Oriented Framework for [Express](http://expressjs.com) and [Mongoos
 - [Models](#models)
 - [Models with Mongoose](#models-with-mongoose)
 - [Controllers](#controllers)
+- [Middleware on Routes](#middleware-routes)
 - [Restful APIs](#restful-apis)
 - [Tests](#tests)
 - [Templates engines](#templates-engines)
@@ -198,6 +199,24 @@ mainRouter.add({
   action: 'sayHello',
   method: 'get' // Defaults 'all'
 });
+```
+
+## <a name="middleware-routes"></a>Middleware on Routes
+
+Here's an example of how to define a middleware on routes:
+
+```js
+var UserController = {
+  showPrivateData: [
+    function (req, res, next) {
+      // Check permissions
+      next();
+    },
+    function (req, res) {
+      // Show Private Data
+    }
+  ],
+};
 ```
 
 ## <a name="restful-apis"></a>Restful APIs

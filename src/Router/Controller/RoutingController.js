@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 var _path = require('path'),
+	_ = require('underscore'),
 	S = require('string'),
 	rode = require('../../../rode');
 
@@ -23,15 +24,22 @@ var RoutingController = function (cb) {
 	 * @param {string} pack
 	 */
 	var createRoutes = function (pack) {
-		var packRouter = rode.getRouter(pack);
-		var routePath = _path.join(rode.packages.getPath(pack), 'routes.js');
+		var packRouter = rode.getRouter(pack),
+			routePath = _path.join(rode.packages.getPath(pack), 'routes.js');
 		try {
 			require(routePath);
 			packRouter.forEach(function (route) {
-				var routePath = packRouter.getPath(route.action);
-				var controller = rode.getController(pack, route.controller);
-				var call = controller[route.action];
-				rode.app[route.method](routePath, call);
+				var routePath = packRouter.getPath(route.action),
+					controller = rode.getController(pack, route.controller),
+					call = controller[route.action];
+
+				// If call is an array, first item is a middleware
+				if (_.isArray(call) && call.length > 1) {
+					rode.app[route.method](routePath, call[0], call[1]);
+				}
+				else {
+					rode.app[route.method](routePath, call);
+				}
 			});
 		}
 		catch (e) { }
