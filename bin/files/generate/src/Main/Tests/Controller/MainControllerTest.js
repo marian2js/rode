@@ -8,7 +8,7 @@ var http = require('http'),
 describe('Main Controller', function () {
 	var config = rode.getConfig();
 
-	it('should respond to /hello with "Hello RodeJS!"', function (done) {
+	it('should respond to / with "Hello RodeJS!"', function (done) {
 		var options = {
 			host: config.host,
 			path: '/',
@@ -16,6 +16,7 @@ describe('Main Controller', function () {
 			method: 'GET'
 		};
 		http.request(options, function (response) {
+			expect(response.statusCode).to.be(200);
 			var str = '';
 			response.on('data', function (chunk) {
 				str += chunk.toString();
@@ -35,6 +36,7 @@ describe('Main Controller', function () {
 			method: 'GET'
 		};
 		http.request(options, function (response) {
+			expect(response.statusCode).to.be(200);
 			var str = '';
 			response.on('data', function (chunk) {
 				str += chunk.toString();

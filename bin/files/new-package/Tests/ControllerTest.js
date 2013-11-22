@@ -16,6 +16,7 @@ describe('__PACKAGE__ Controller', function () {
 			method: 'GET'
 		};
 		http.request(options, function (response) {
+			expect(response.statusCode).to.be(200);
 			var str = '';
 			response.on('data', function (chunk) {
 				str += chunk.toString();
