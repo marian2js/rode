@@ -10,6 +10,7 @@ var Router = Model.extend({
 	name: 'Router',
 	routes: {},
 	bases: {},
+	apis: {},
 	add: function (pack, route) {
 		if (!this.routes[pack]) {
 			this.routes[pack] = [];
@@ -87,6 +88,12 @@ var Router = Model.extend({
 	},
 	setBase: function (pack, base) {
 		this.bases[pack] = base;
+	},
+	getRestApi: function (pack) {
+		return this.apis[pack] || '';
+	},
+	setRestApi: function (pack, apiUrl) {
+		this.apis[pack] = apiUrl;
 	}
 });
 

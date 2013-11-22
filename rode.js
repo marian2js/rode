@@ -292,35 +292,8 @@ var rode = (function () {
 			cb(null);
 			return;
 		}
-		self.packages.getAll(function (err, packs) {
-			if (err) {
-				cb(err);
-				return;
-			}
-			packs.forEach(function (pack) {
-				var packRouter = self.getRouter(pack);
-				var routePath = _path.join(self.packages.getPath(pack), 'routes.js');
-				try {
-					require(routePath);
-					packRouter.forEach(function (route) {
-						var routePath = packRouter.getPath(route.action);
-						var controller = self.getController(pack, route.controller);
-						var call = controller[route.action];
-						if (route.method === 'get') {
-							self.app.get(routePath, call);
-						}
-						else if (route.method === 'post') {
-							self.app.post(routePath, call);
-						}
-						else {
-							self.app.all(routePath, call);
-						}
-					});
-				}
-				catch (e) { }
-			});
-			cb(null);
-		});
+		var Routing = self.getCoreController('Router', 'Routing');
+		Routing(cb);
 	};
 
 	return self;

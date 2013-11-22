@@ -1,9 +1,20 @@
 RodeJS
 ====
 
-Smart Packet-Oriented Boilerplate for [Express](http://expressjs.com) and [Mongoose](http://mongoosejs.com).
+Smart Packet-Oriented Framework for [Express](http://expressjs.com) and [Mongoose](http://mongoosejs.com).
 
-## Quick Start
+##Table of Contents:
+
+- [Quick Start](#quick-start)
+- [Packages](#packages)
+- [Models](#models)
+- [Models with Mongoose](#models-with-mongoose)
+- [Controllers](#controllers)
+- [Restful APIs With Rode](#restful-apis-with-rode)
+- [Tests](#tests)
+- [Templates engines](#templates-engines)
+
+## <a name="quick-start"></a>Quick Start
 
 Installing Rode and setting up your application:
 
@@ -35,7 +46,7 @@ The usage of `rode generate` is nearly the same that [Express](http://expressjs.
       -f, --force         force on non-empty directory
 
 
-## Packages
+## <a name="packages"></a>Packages
 
 A package (or bundle) is a component of your application with its own MVC.
 
@@ -43,8 +54,16 @@ You can simply create a new package with the command:
 
     $ rode new:package PackageName
 
+    Usage: rode new:package <package>
 
-## Models
+    Options:
+
+      -h, --help   output usage information
+      -r, --rest   config rest api for this package
+      -f, --force  force on existing package
+
+
+## <a name="models"></a>Models
 
 Models on Rode are modules really extensibles.
 
@@ -67,7 +86,7 @@ var Employee = Person.extend({
 Employee.sayHello(); // Hello Models!
 ```
 
-## Models with Mongoose
+## <a name="models-with-mongoose"></a>Models with Mongoose
 
 In this example we first define Person Model and their Schema:
 
@@ -135,7 +154,7 @@ john.save(function (err) {
 
 We recommend having a single file for each model.
 
-## Controllers
+## <a name="controllers"></a>Controllers
 
 Controllers and Routes work together to facilitate the routing of the application.
 
@@ -181,14 +200,63 @@ mainRouter.add({
 });
 ```
 
-## Tests
+## <a name="restful-apis-with-rode"></a>Restful APIs With Rode
+
+Make a Restful API can not be more easy.
+Create your package with the command:
+
+    $ rode new:package PackageName --rest
+
+Or add `productRouter.setRestApi('/api/products/');` on `routes.js`
+
+Now you should create methods on your `RestController.js` following simple naming conventions.
+
+Here are some examples:
+
+```js
+// [GET] /api/products
+get: function (req, res) { ... }
+
+// [POST] /api/products
+post: function (req, res) { ... }
+
+// [GET] /api/products/sponsored
+getSponsored: function (req, res) { ... }
+
+// [PUT] /api/products/sponsored
+putSponsored: function (req, res) { ... }
+
+// [POST] /api/products/sponsored/today
+postSponsoredToday: function (req, res) { ... }
+
+// [GET] /api/products/:id
+getById: function (req, res) { ... }
+
+// [POST] /api/products/:id
+postById: function (req, res) { ... }
+
+// [DELETE] /api/products/:id
+deleteById: function (req, res) { ... }
+
+// [GET] /api/products/:id/comments
+getByIdComments: function (req, res) { ... }
+
+// [PUT] /api/products/:id/comments/:id2
+putByIdCommentsById: function (req, res) { ... }
+```
+
+You can create as many combinations as you like.
+Remember that each package can have its own `RestController.js`
+
+
+## <a name="tests"></a>Tests
 
 You can run all the test with the command:
 
     $ grunt test
 
 
-## Templates engines
+## <a name="templates-engines"></a>Templates engines
 
 Rode supports all this templates engines:
 

@@ -1,4 +1,5 @@
 var _path = require('path'),
+	os = require('os'),
 	fs = require('extfs'),
 	cache = require('nodecache'),
 	S = require('string'),
@@ -80,11 +81,12 @@ var packages = {
 	/**
 	 *
 	 * @param name
+	 * @param [rest]
 	 * @param [force]
 	 */
-	add: function (name, force) {
+	add: function (name, rest, force) {
 		name = S(name).capitalize();
-		addPackage(name, !!force);
+		addPackage(name, !!rest, !!force);
 	},
 
 	remove: function (name) {
@@ -92,7 +94,7 @@ var packages = {
 	}
 };
 
-function addPackage (pack, force) {
+function addPackage (pack, rest, force) {
 	var filesPath = _path.normalize(rode.getCorePath() + 'bin/files/new-package/');
 	var filesViewPath = _path.normalize(rode.getCorePath() + 'bin/files/views/');
 	var destPath = _path.normalize(rode.getConfig().srcDir + '/' + pack);
@@ -117,17 +119,26 @@ function addPackage (pack, force) {
 	var renderedTemplates = {
 		controller: renderTemplate(pack, templates.controller),
 		model: renderTemplate(pack, templates.model),
-		routes: renderTemplate(pack, templates.routes),
+		routes: renderTemplate(pack, templates.routes, rest),
 		tests: {
 			controller: renderTemplate(pack, templates.tests.controller),
 			model: renderTemplate(pack, templates.tests.model)
 		}
 	};
+	if (rest) {
+		templates.restController = fs.readFileSync(filesPath + 'RestController.js').toString();
+		templates.tests.restController = fs.readFileSync(filesPath + 'Tests/RestControllerTest.js').toString();
+		renderedTemplates.restController = renderTemplate(pack, templates.restController);
+		renderedTemplates.tests.restController = renderTemplate(pack, templates.tests.restController);
+	}
 
 	// Create Controllers
 	utils.mkdir(destPath + '/Controller', function () {
 		utils.write(destPath + '/Controller/MainController.js', renderedTemplates.controller);
 		utils.write(destPath + '/routes.js', renderedTemplates.routes);
+		if (rest) {
+			utils.write(destPath + '/Controller/RestController.js', renderedTemplates.restController);
+		}
 	});
 
 	// Create Models
@@ -144,14 +155,38 @@ function addPackage (pack, force) {
 	// Create Tests
 	utils.mkdir(destPath + '/Tests/Controller', function () {
 		utils.write(destPath + '/Tests/Controller/MainControllerTest.js', renderedTemplates.tests.controller);
+		if (rest) {
+			utils.write(destPath + '/Tests/Controller/RestControllerTest.js', renderedTemplates.tests.restController);
+		}
 	});
 	utils.mkdir(destPath + '/Tests/Model', function () {
 		utils.write(destPath + '/Tests/Model/' + pack + 'Test.js', renderedTemplates.tests.model);
 	});
 }
 
-function renderTemplate (pack, template) {
-	template = S(template)
+/**
+ *
+ * @param pack
+ * @param template
+ * @param [rest]
+ * @returns {string}
+ */
+function renderTemplate (pack, template, rest) {
+	if (rest) {
+		template = S(template).replaceAll('__routeRest__',
+			os.EOL +
+			'/**' + os.EOL +
+			' * Enable Rest API url' + os.EOL +
+			' * Config Rest API on \'RestController.js\'' + os.EOL +
+			' */' + os.EOL +
+			'__lowerPACKAGE__Router.setRestApi(\'/api/__lowerPACKAGE__/\');' +
+			os.EOL);
+	}
+	else {
+		template = S(template).replaceAll('__routeRest__', '');
+	}
+
+	template = template
 		.replaceAll('__PACKAGE__', pack)
 		.replaceAll('__lowerPACKAGE__', pack.toLowerCase());
 
@@ -162,7 +197,7 @@ function renderTemplate (pack, template) {
 		template = template.replaceAll('//{{render}}//', '');
 	}
 
-	return template;
+	return template.s;
 }
 
 module.exports = packages;

@@ -12,6 +12,7 @@ rode.setBinCommand(true);
 program._name = 'rode new:package';
 program
 	.usage('<package>')
+	.option('-r, --rest', 'config rest api for this package')
 	.option('-f, --force', 'force on existing package')
 	.parse(process.argv);
 
@@ -39,7 +40,7 @@ rode.start(rootPath, function (err) {
 	// Add all packages
 	packages.forEach(function (pack) {
 		try {
-			rode.packages.add(pack, program.force);
+			rode.packages.add(pack, program.rest, program.force);
 		}
 		catch (e) {
 			if (e.message === 'Path not empty') {

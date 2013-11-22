@@ -1,7 +1,7 @@
 {
   "name": "rode",
-  "description": "Smart Packet-Oriented Boilerplate for Express and Mongoose.",
-  "version": "0.1.5",
+  "description": "Smart Packet-Oriented Framework for Express and Mongoose.",
+  "version": "0.1.7",
   "author": "Mariano Pardo (Codexar)",
   "dependencies": {
     "express": ">= 3 < 4",
@@ -37,6 +37,15 @@
     "rode-generate": "./bin/rode-generate",
     "rode-new:package": "./bin/rode-new:package"
   },
+  "keywords": [
+    "framework",
+    "boilerplate",
+    "mvc",
+    "express",
+    "mongoose",
+    "rest",
+    "restful"
+  ],
   "engines": {
     "node": ">= 0.8.0"
   }

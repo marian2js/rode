@@ -35,10 +35,19 @@ var MainController = function (pack) {
 		},
 		getPath: function (action) {
 			return Router.getPath(pack, action);
-			return this;
 		},
 		setBase: function (base) {
 			Router.setBase(pack, base);
+			return this;
+		},
+		isRestful: function () {
+			return !!Router.getRestApi(pack);
+		},
+		getRestApi: function () {
+			return Router.getRestApi(pack);
+		},
+		setRestApi: function (apiUrl) {
+			Router.setRestApi(pack, apiUrl);
 			return this;
 		}
 	};

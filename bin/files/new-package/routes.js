@@ -3,7 +3,7 @@
  */
 var rode = require('rode');
 var __lowerPACKAGE__Router = rode.getRouter('__PACKAGE__');
-
+__routeRest__
 /**
  * Base Route for this Package (Optional)
  */
