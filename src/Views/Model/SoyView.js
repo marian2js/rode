@@ -6,11 +6,11 @@ var _path = require('path'),
 	soynode = require('soynode'),
 	rode = require('../../../rode');
 
-var Model = rode.getBaseModel();
+var Views = rode.getCoreModel('Views');
 
-var Views = Model.extend((function () {
+var SoyView = Views.extend((function () {
 	var self = {
-		name: 'Views'
+		name: 'SoyView'
 	};
 
 	/**
@@ -62,4 +62,4 @@ var Views = Model.extend((function () {
 	return self;
 })());
 
-module.exports = Views;
+module.exports = SoyView;
