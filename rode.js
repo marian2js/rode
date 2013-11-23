@@ -29,10 +29,8 @@ var rode = (function () {
 		if (!config) {
 			self.getConfig();
 		}
-		createRoutes(function () {
-			cb(null);
-			started = true;
-		});
+		cb(null);
+		started = true;
 	};
 
 	/**
@@ -41,9 +39,11 @@ var rode = (function () {
 	 * @param cb
 	 */
 	self.startServer = function (cb) {
-		self.view.compile(function (err) {
-			if (err) throw err;
-			http.createServer(self.app).listen(self.app.get('port'), cb);
+		createRoutes(function () {
+			self.view.compile(function (err) {
+				if (err) throw err;
+				http.createServer(self.app).listen(self.app.get('port'), cb);
+			});
 		});
 	};
 
