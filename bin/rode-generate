@@ -188,7 +188,7 @@ function createApplicationAt(path) {
 		utils.mkdir(path + '/public/css', function(){
 			switch (program.css) {
 				case 'less':
-					utils.write(path + '/public/less/style.less', less);
+					utils.write(path + '/public/css/style.less', less);
 					break;
 				case 'stylus':
 					utils.write(path + '/public/css/style.styl', stylus);
