@@ -183,18 +183,18 @@ function createApplicationAt(path) {
 	utils.mkdir(path, function(){
 		utils.mkdir(path + '/public');
 		utils.mkdir(path + '/public/vendor');
-		utils.mkdir(path + '/public/javascripts');
+		utils.mkdir(path + '/public/js');
 		utils.mkdir(path + '/public/images');
-		utils.mkdir(path + '/public/stylesheets', function(){
+		utils.mkdir(path + '/public/css', function(){
 			switch (program.css) {
 				case 'less':
-					utils.write(path + '/public/stylesheets/style.less', less);
+					utils.write(path + '/public/less/style.less', less);
 					break;
 				case 'stylus':
-					utils.write(path + '/public/stylesheets/style.styl', stylus);
+					utils.write(path + '/public/css/style.styl', stylus);
 					break;
 				default:
-					utils.write(path + '/public/stylesheets/style.css', css);
+					utils.write(path + '/public/css/style.css', css);
 			}
 		});
 

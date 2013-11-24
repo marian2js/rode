@@ -15,7 +15,7 @@ var packages = {
 	 * @api public
 	 */
 	getPath: function (pack) {
-		return rode.getConfig().srcDir + '/' + pack;
+		return rode.getPath('src') + '/' + pack;
 	},
 
 	/**
@@ -38,7 +38,7 @@ var packages = {
 		if (packs) {
 			return cb(null, packs);
 		}
-		var path = rode.getConfig().srcDir;
+		var path = rode.getPath('src');
 		fs.getDirs(path, function (err, files) {
 			if (err) {
 				return cb(err);
@@ -56,7 +56,7 @@ var packages = {
 	getAllSync: function () {
 		var packs = cache.get('rode_packages');
 		if (!packs) {
-			var srcPath = rode.getConfig().srcDir;
+			var srcPath = rode.getPath('src');
 			packs = fs.getDirsSync(srcPath);
 			cache.set('rode_packages', packs);
 		}
@@ -97,8 +97,8 @@ var packages = {
 function addPackage (pack, rest, force) {
 	var filesPath = _path.normalize(rode.getCorePath() + 'bin/files/new-package/');
 	var filesViewPath = _path.normalize(rode.getCorePath() + 'bin/files/views/');
-	var destPath = _path.normalize(rode.getConfig().srcDir + '/' + pack);
-	var viewPath = _path.normalize(rode.getConfig().views.dir + '/' + pack);
+	var destPath = _path.normalize(rode.getPath('src') + '/' + pack);
+	var viewPath = _path.normalize(rode.getPath('views') + '/' + pack);
 
 	// Check if path destPath not exists
 	if (!force) {
