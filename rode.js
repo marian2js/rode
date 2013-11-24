@@ -50,13 +50,18 @@ var rode = (function () {
 	/**
 	 * Get Root Path
 	 *
+	 * @param [dir]
 	 * @returns {string}
 	 */
-	self.getRootPath = function () {
-		if (!rootPath) {
+	self.getRootPath = function (dir) {
+		var path = rootPath;
+		if (!path) {
 			return null;
 		}
-		return _path.normalize(rootPath + '/');
+		if (dir) {
+			path = _path.join(path, dir);
+		}
+		return _path.normalize(path + '/');
 	};
 
 	/**
@@ -74,6 +79,39 @@ var rode = (function () {
 	 */
 	self.getCorePath = function () {
 		return _path.normalize(__dirname + '/');
+	};
+
+	/**
+	 * Get path from a name.
+	 *
+	 * @param name
+	 */
+	self.getPath = function (name) {
+		switch (name) {
+			case 'root':
+				return self.getRootPath();
+				break;
+			case 'src':
+				return self.getRootPath(self.getConfig().srcDir);
+				break;
+			case 'views':
+				return self.getRootPath(self.getConfig().views.dir);
+				break;
+			case 'statics':
+				return self.getRootPath(self.getConfig().statics.dir);
+				break;
+			case 'images':
+				return _path.join(self.getPath('statics'), self.getConfig().statics.images);
+				break;
+			case 'js':case 'javascript':
+				return _path.join(self.getPath('statics'), self.getConfig().statics.js);
+				break;
+			case 'css':case 'stylesheets':
+				return _path.join(self.getPath('statics'), self.getConfig().statics.css);
+				break;
+			default:
+				return '';
+		}
 	};
 
 	/**
@@ -250,12 +288,26 @@ var rode = (function () {
 			self.app.use(config.logger);
 		}
 
+		// Config CSS
+		switch (config.css) {
+			case 'less':
+				self.app.use(require('less-middleware')(
+					{
+						src: self.getPath('statics'),
+						compress: rode.env === 'production'
+					}
+				));
+				break;
+			case 'stylus':
+				self.app.use(require('stylus').middleware(self.getPath('statics')));
+		}
+
 		// Config Statics
-		if (config.staticsDir) {
-			self.app.use(self.express.static(config.staticsDir));
+		if (config.statics && config.statics.dir) {
+			self.app.use(self.express.static(self.getPath('statics')));
 		}
 		else {
-			throw new Error('Please add option "staticsDir" to config');
+			throw new Error('Please add option "statics" to config');
 		}
 
 		// Config Error Handler
@@ -266,15 +318,6 @@ var rode = (function () {
 		// Config BodyParser
 		if (config.bodyParser) {
 			self.app.use(self.express.bodyParser());
-		}
-
-		// Config CSS
-		switch (config.css) {
-			case 'less':
-				self.app.use(require('less-middleware')({ src: config.staticsDir }));
-				break;
-			case 'stylus':
-				self.app.use(require('stylus').middleware(config.staticsDir));
 		}
 
 		// Config MongoDB
