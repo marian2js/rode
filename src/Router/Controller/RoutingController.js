@@ -26,23 +26,20 @@ var RoutingController = function (cb) {
 	var createRoutes = function (pack) {
 		var packRouter = rode.getRouter(pack),
 			routePath = _path.join(rode.packages.getPath(pack), 'routes.js');
-		try {
-			require(routePath);
-			packRouter.forEach(function (route) {
-				var routePath = packRouter.getPath(route.action),
-					controller = rode.getController(pack, route.controller),
-					call = controller[route.action];
+		require(routePath);
+		packRouter.forEach(function (route) {
+			var routePath = packRouter.getPath(route.action),
+				controller = rode.getController(pack, route.controller),
+				call = controller[route.action];
 
-				// If call is an array, first item is a middleware
-				if (_.isArray(call) && call.length > 1) {
-					rode.app[route.method](routePath, call[0], call[1]);
-				}
-				else {
-					rode.app[route.method](routePath, call);
-				}
-			});
-		}
-		catch (e) { }
+			// If call is an array, first item is a middleware
+			if (_.isArray(call) && call.length > 1) {
+				rode.app[route.method](routePath, call[0], call[1]);
+			}
+			else {
+				rode.app[route.method](routePath, call);
+			}
+		});
 		if (packRouter.isRestful()) {
 			restRouter(pack, packRouter.getRestApi());
 		}
