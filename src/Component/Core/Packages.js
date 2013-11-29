@@ -15,7 +15,7 @@ var packages = {
 	 * @api public
 	 */
 	getPath: function (pack) {
-		return rode.getPath('src') + '/' + pack;
+		return _path.normalize(rode.getPath('src') + '/' + pack);
 	},
 
 	/**
@@ -25,7 +25,7 @@ var packages = {
 	 * @api public
 	 */
 	getCorePath: function (pack) {
-		return rode.getCoreConfig().srcDir + '/' + pack;
+		return _path.normalize(rode.getCoreConfig().srcDir + '/' + pack);
 	},
 
 	/**
