@@ -53,9 +53,9 @@ A package (or bundle) is a component of your application with its own MVC.
 
 You can simply create a new package with the command:
 
-    $ rode new:package PackageName
+    $ rode new-package PackageName
 
-    Usage: rode new:package <package>
+    Usage: rode new-package <package>
 
     Options:
 
@@ -224,7 +224,7 @@ var UserController = {
 Make a Restful API can not be more easy.
 Create your package with the command:
 
-    $ rode new:package PackageName --rest
+    $ rode new-package PackageName --rest
 
 Or add `productRouter.setRestApi('/api/products/');` on `routes.js`
 

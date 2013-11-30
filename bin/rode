@@ -10,5 +10,5 @@ var pkg = require('../package.json');
 program
 	.version(pkg.version)
 	.command('generate [options] [dir]', 'Generate new project')
-	.command('new:package <package>', 'Create a new package on the project')
+	.command('new-package <package>', 'Create a new package on the project')
 	.parse(process.argv);
