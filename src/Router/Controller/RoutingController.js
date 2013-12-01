@@ -32,12 +32,35 @@ var RoutingController = function (cb) {
 				controller = rode.getController(pack, route.controller),
 				call = controller[route.action];
 
+			// Fix routes
+			if (routePath.indexOf('\\') !== -1) {
+				routePath = S(routePath).replaceAll('\\', '/').s;
+			}
+			while (routePath.indexOf('//') !== -1) {
+				routePath = S(routePath).replaceAll('//', '/').s;
+			}
+			if (S(routePath).endsWith('/')) {
+				routePath = routePath.substring(0, routePath.length - 1);
+			}
+
 			// If call is an array, first item is a middleware
 			if (_.isArray(call) && call.length > 1) {
-				rode.app[route.method](routePath, call[0], call[1]);
+				if (routePath) {
+					rode.app[route.method](routePath, call[0], call[1]);
+					rode.app[route.method](routePath + '/', call[0], call[1]);
+				}
+				else {
+					rode.app[route.method]('/', call[0], call[1]);
+				}
 			}
 			else {
-				rode.app[route.method](routePath, call);
+				if (routePath) {
+					rode.app[route.method](routePath, call);
+					rode.app[route.method](routePath + '/', call);
+				}
+				else {
+					rode.app[route.method]('/', call);
+				}
 			}
 		});
 		if (packRouter.isRestful()) {
