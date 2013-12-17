@@ -141,6 +141,11 @@ var bower = {
 var grunt = fs.readFileSync(filesPath + 'Gruntfile.js').toString();
 
 /**
+ * Git ignore
+ */
+var gitignore = fs.readFileSync(filesPath + '.gitignore').toString();
+
+/**
  * App template.
  */
 var app = fs.readFileSync(filesPath + 'app.js').toString();
@@ -239,6 +244,9 @@ function createApplicationAt(path) {
 		// Write Grunt
 		utils.write(path + '/Gruntfile.js', grunt);
 
+		// Write Git ignore
+		utils.write(path + '/.gitignore', gitignore);
+
 		// package.json
 		var pkg = {
 			name: 'application-name'
@@ -250,7 +258,6 @@ function createApplicationAt(path) {
 				underscore: ">= 1.4 < 2"
 			},
 			devDependencies: {
-				mocha: ">= 1.13 < 2",
 				"expect.js": "latest",
 				"grunt-mocha-test": "~0.7.0",
 				"grunt": "latest"
