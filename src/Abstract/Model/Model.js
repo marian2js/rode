@@ -4,6 +4,8 @@ require('mongoose-schema-extend');
 
 var Schema = mongoose.Schema;
 
+var modelError = 'Error: The Model need name and schema before compile it';
+
 var Model = {
 	/**
 	 * Extends a Model
@@ -58,7 +60,7 @@ var Model = {
 	 */
 	compile: function () {
 		if (!this.name || !this.schema) {
-			throw new Error('Error: The Model need name and schema before compile it');
+			throw new Error(modelError);
 		}
 		if (this.super.hasSchema()) {
 			this.super.compile();
@@ -91,12 +93,7 @@ var Model = {
 				query[this.__discriminatorKey] = this.name;
 			}
 		}
-		this.model.find(query, function (err, items) {
-			if (err) {
-				return cb(err);
-			}
-			cb(null, items);
-		});
+		this.model.find(query, cb);
 	},
 
 	/**
@@ -114,12 +111,20 @@ var Model = {
 				_type: this.name
 			}, query);
 		}
-		this.model.findOne(query, function (err, items) {
-			if (err) {
-				return cb(err);
-			}
-			cb(null, items);
-		});
+		this.model.findOne(query, cb);
+	},
+
+	/**
+	 * Find element by Id
+	 *
+	 * @param id
+	 * @param cb
+	 */
+	findById: function (id, cb) {
+		if (!this.model) {
+			throw new Error('Error: The Model is not yet compiled!');
+		}
+		this.model.findById(id, cb);
 	},
 
 	/**

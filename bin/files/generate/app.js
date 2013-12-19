@@ -10,6 +10,6 @@ rode.start(__dirname, function (err) {
 	app.use(rode.express.methodOverride());{sess}
 
 	rode.startServer(function () {
-		console.log('Server Started!');
+		console.log('Server started on ' + rode.env + '!');
 	});
 });
