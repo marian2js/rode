@@ -15,6 +15,7 @@ var config = {
 	srcDir: 'src',
 	statics: {
 		dir: 'public',
+		images: 'images',
 		js: 'js',
 		css: 'css'
 	},
