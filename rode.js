@@ -226,7 +226,7 @@ var rode = (function () {
 		if (!name) {
 			name = pack;
 		}
-		return require(self.packages.getPath(pack) + '/Model/' + name);
+		return require(self.packages.getPath(pack) + '/Entity/' + name);
 	};
 
 	/**
