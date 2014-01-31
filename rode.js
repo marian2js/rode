@@ -19,7 +19,7 @@ var rode = (function () {
 	 * Start Rode App
 	 *
 	 * @param {string} path
-	 * @param cb
+	 * @param {Function} cb
 	 */
 	self.start = function (path, cb) {
 		rootPath = path;
@@ -36,7 +36,7 @@ var rode = (function () {
 	/**
 	 * Start HTTP Server
 	 *
-	 * @param cb
+	 * @param {Function} cb
 	 */
 	self.startServer = function (cb) {
 		createRoutes(function () {
@@ -67,7 +67,7 @@ var rode = (function () {
 	/**
 	 * Set Root Path
 	 *
-	 * @param path
+	 * @param {string} path
 	 */
 	self.setRootPath = function (path) {
 		rootPath = path;
@@ -84,7 +84,8 @@ var rode = (function () {
 	/**
 	 * Get path from a name.
 	 *
-	 * @param name
+	 * @param {string} name
+	 * @returns {string}
 	 */
 	self.getPath = function (name) {
 		switch (name) {
@@ -97,7 +98,7 @@ var rode = (function () {
 			case 'views':
 				return self.getRootPath(self.getConfig().views.dir);
 				break;
-			case 'statics':
+			case 'statics':case 'public':
 				return self.getRootPath(self.getConfig().statics.dir);
 				break;
 			case 'images':
@@ -116,7 +117,7 @@ var rode = (function () {
 
 	/**
 	 *
-	 * @param [env]
+	 * @param  {string} [env]
 	 * @returns {Object}
 	 */
 	self.getConfig = function (env) {
@@ -128,8 +129,8 @@ var rode = (function () {
 
 	/**
 	 *
-	 * @param [env]
-	 * @param [force]
+	 * @param {string} [env]
+	 * @param {boolean} [force]
 	 * @returns {Object}
 	 */
 	self.getCoreConfig = function (env, force) {
@@ -148,8 +149,8 @@ var rode = (function () {
 
 	/**
 	 *
-	 * @param pack
-	 * @param [ctrl]
+	 * @param {string} pack
+	 * @param {string} [ctrl]
 	 * @returns {Controller}
 	 */
 	self.getController = function (pack, ctrl) {
@@ -161,8 +162,8 @@ var rode = (function () {
 
 	/**
 	 *
-	 * @param pack
-	 * @param [ctrl]
+	 * @param {string} pack
+	 * @param {string} [ctrl]
 	 * @returns {Controller}
 	 */
 	self.getCoreController = function (pack, ctrl) {
@@ -174,8 +175,8 @@ var rode = (function () {
 
 	/**
 	 *
-	 * @param pack
-	 * @param [model]
+	 * @param {string} pack
+	 * @param {string} [model]
 	 * @returns {Model}
 	 */
 	self.getModel = function (pack, model) {
@@ -187,8 +188,8 @@ var rode = (function () {
 
 	/**
 	 *
-	 * @param pack
-	 * @param [model]
+	 * @param {string} pack
+	 * @param {string} [model]
 	 * @returns {Model}
 	 */
 	self.getCoreModel = function (pack, model) {
@@ -200,8 +201,8 @@ var rode = (function () {
 
 	/**
 	 *
-	 * @param type
-	 * @param name
+	 * @param {string} type
+	 * @param {string} name
 	 * @returns {Object}
 	 */
 	self.getCoreComponent = function (type, name) {
@@ -218,6 +219,18 @@ var rode = (function () {
 
 	/**
 	 *
+	 * @param {string} pack
+	 * @param {string} [name]
+	 */
+	self.getEntity = function (pack, name) {
+		if (!name) {
+			name = pack;
+		}
+		return require(self.packages.getPath(pack) + '/Model/' + name);
+	};
+
+	/**
+	 *
 	 * @returns {Mongo}
 	 */
 	self.getDb = function () {
@@ -230,7 +243,7 @@ var rode = (function () {
 
 	/**
 	 *
-	 * @param pack
+	 * @param {string} pack
 	 * @returns {Controller}
 	 */
 	self.getRouter = function (pack) {
