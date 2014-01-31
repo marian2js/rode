@@ -2,7 +2,8 @@
  * Module dependencies
  */
 var _path = require('path'),
-	http = require('http');
+	http = require('http'),
+	url = require('url');
 
 var rode = (function () {
 	var self = {};
@@ -281,8 +282,8 @@ var rode = (function () {
 		self.app.set('port', config.port || 3000);
 
 		// Config Host
-		if (config.baseUri) {
-			config.host = config.baseUri.replace('http', '').replace('https', '').replace('://', '');
+		if (config.baseUri && !config.host) {
+			config.host = url.parse(config.baseUri).host;
 		}
 
 		// Config Views
