@@ -4,7 +4,8 @@ require('mongoose-schema-extend');
 
 var Schema = mongoose.Schema;
 
-var modelError = 'Error: The Model need name and schema before compile it';
+var modelError = 'Error: The Model need name and schema before compile it',
+	notCompiledError = 'Error: The Model is not yet compiled!';
 
 var Model = {
 	/**
@@ -86,7 +87,7 @@ var Model = {
 	 */
 	find: function (query, cb) {
 		if (!this.model) {
-			throw new Error('Error: The Model is not yet compiled!');
+			throw new Error(notCompiledError);
 		}
 		if(this.super.schema) {
 			if (!query[this.__discriminatorKey]) {
@@ -104,7 +105,7 @@ var Model = {
 	 */
 	findOne: function (query, cb) {
 		if (!this.model) {
-			throw new Error('Error: The Model is not yet compiled!');
+			throw new Error(notCompiledError);
 		}
 		if(this.super.schema) {
 			query = _.extend({
@@ -122,7 +123,7 @@ var Model = {
 	 */
 	findById: function (id, cb) {
 		if (!this.model) {
-			throw new Error('Error: The Model is not yet compiled!');
+			throw new Error(notCompiledError);
 		}
 		this.model.findById(id, cb);
 	},
@@ -136,6 +137,9 @@ var Model = {
 		this.find({}, cb);
 	},
 
+	/**
+	 * Get a new model, equal to this one
+	 */
 	clone: function () {
 		return _.clone(this);
 	},
