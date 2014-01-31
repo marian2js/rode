@@ -324,7 +324,7 @@ var rode = (function () {
 		}
 
 		// Config Error Handler
-		if (config.useErrorHandler) {
+		if (config.errorHandler) {
 			self.app.use(self.express.errorHandler());
 		}
 
