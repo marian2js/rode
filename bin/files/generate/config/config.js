@@ -32,7 +32,6 @@ var config = {
 	},
 	db: process.env.MONGOHQ_URL,
 	favicon: rode.express.favicon(),
-	logger: rode.express.logger(),
 	bodyParser: true
 };
 
