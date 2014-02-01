@@ -3,7 +3,8 @@
  */
 var _path = require('path'),
 	http = require('http'),
-	url = require('url');
+	url = require('url'),
+	express = require('express');
 
 var rode = (function () {
 	var self = {};
@@ -13,7 +14,7 @@ var rode = (function () {
 	var rootPath;
 	var started = false;
 
-	self.express = require('express');
+	self.express = express;
 	self.app = self.express();
 
 	/**
@@ -30,8 +31,8 @@ var rode = (function () {
 		if (!config) {
 			self.getConfig();
 		}
-		cb(null);
 		started = true;
+		cb(null);
 	};
 
 	/**
