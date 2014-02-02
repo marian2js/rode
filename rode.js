@@ -143,7 +143,7 @@ var rode = (function () {
 			self.packages = require(self.getCoreConfig().srcDir + '/Component/Core/Packages');
 		}
 		if (force) {
-			config = coreConfig;
+			configger(coreConfig);
 			self.getDb();
 		}
 		return coreConfig;
@@ -320,9 +320,6 @@ var rode = (function () {
 		// Config Statics
 		if (config.statics && config.statics.dir) {
 			self.app.use(self.express.static(self.getPath('statics')));
-		}
-		else {
-			throw new Error('Please add option "statics" to config');
 		}
 
 		// Config Error Handler
