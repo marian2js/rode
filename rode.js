@@ -157,7 +157,7 @@ var rode = (function () {
 	 */
 	self.getController = function (pack, ctrl) {
 		if (!ctrl) {
-			ctrl = 'Main';
+			ctrl = pack;
 		}
 		return require(self.packages.getPath(pack) + '/Controller/' + ctrl + 'Controller');
 	};
@@ -170,7 +170,7 @@ var rode = (function () {
 	 */
 	self.getCoreController = function (pack, ctrl) {
 		if (!ctrl) {
-			ctrl = 'Main';
+			ctrl = pack;
 		}
 		return require(self.packages.getCorePath(pack) + '/Controller/' + ctrl + 'Controller');
 	};

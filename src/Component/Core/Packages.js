@@ -134,7 +134,7 @@ function addPackage (pack, rest, force) {
 
 	// Create Controllers
 	utils.mkdir(destPath + '/Controller', function () {
-		utils.write(destPath + '/Controller/MainController.js', renderedTemplates.controller);
+		utils.write(destPath + '/Controller/' + pack + 'Controller.js', renderedTemplates.controller);
 		utils.write(destPath + '/routes.js', renderedTemplates.routes);
 		if (rest) {
 			utils.write(destPath + '/Controller/RestController.js', renderedTemplates.restController);
@@ -154,7 +154,7 @@ function addPackage (pack, rest, force) {
 
 	// Create Tests
 	utils.mkdir(destPath + '/Tests/Controller', function () {
-		utils.write(destPath + '/Tests/Controller/MainControllerTest.js', renderedTemplates.tests.controller);
+		utils.write(destPath + '/Tests/Controller/' + pack + 'ControllerTest.js', renderedTemplates.tests.controller);
 		if (rest) {
 			utils.write(destPath + '/Tests/Controller/RestControllerTest.js', renderedTemplates.tests.restController);
 		}

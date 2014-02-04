@@ -8,7 +8,7 @@ var __PACKAGE__ = rode.getModel('__PACKAGE__');
 /**
  * Main Controller of __PACKAGE__
  */
-var MainController = {
+var __PACKAGE__Controller = {
 
 	/**
 	 * index Action
@@ -21,4 +21,4 @@ var MainController = {
 	}
 };
 
-module.exports = MainController;
+module.exports = __PACKAGE__Controller;
