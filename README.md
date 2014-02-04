@@ -82,7 +82,7 @@ var User = rode.Model.extend({
   canAdmin: false
 });
 
-var Admin = Person.extend({
+var Admin = User.extend({
   canAdmin: true
 });
 
@@ -119,7 +119,7 @@ Both models will share the same collection on MongoDB.
 Documents of the extended models will have an attribute `_type` to differentiate.
 
 ```js
-var Admin = Person.extend({
+var Admin = User.extend({
   name: 'Admin',
   // The schema for admins is the schema for users + their own schema
   schema: {
