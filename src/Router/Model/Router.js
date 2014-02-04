@@ -1,13 +1,9 @@
 /**
  * Module dependencies.
  */
-var path = require('path'),
-	rode = require('../../../rode');
+var path = require('path');
 
-var Model = rode.getBaseModel();
-
-var Router = Model.extend({
-	name: 'Router',
+var Router = {
 	routes: {},
 	bases: {},
 	apis: {},
@@ -95,6 +91,6 @@ var Router = Model.extend({
 	setRestApi: function (pack, apiUrl) {
 		this.apis[pack] = apiUrl;
 	}
-});
+};
 
 module.exports = Router;

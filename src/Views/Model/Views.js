@@ -1,14 +1,5 @@
-/**
- * Module dependencies.
- */
-var rode = require('../../../rode');
-
-var Model = rode.getBaseModel();
-
-var Views = Model.extend((function () {
-	var self = {
-		name: 'Views'
-	};
+var Views = (function () {
+	var self = {};
 
 	/**
 	 * Config View Engine
@@ -31,6 +22,6 @@ var Views = Model.extend((function () {
 	};
 
 	return self;
-})());
+})();
 
 module.exports = Views;
