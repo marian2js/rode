@@ -7,7 +7,7 @@ var rode = require('rode');
  * __PACKAGE__ Model
  */
 var __PACKAGE__Model = rode.Model.extend({
-	initialize: {
+	initialize: function (attrs) {
         // TODO
     }
 });
