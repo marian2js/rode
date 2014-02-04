@@ -154,7 +154,7 @@ Model.extend = function(protoProps, staticProps) {
     } else {
         child = function() {
             var _class = this._class ? this._class : child;
-            return parent.apply(_.extend(this, { _class: _class }), arguments);
+            return parent.apply(_.extend(this, { _class: _class, super: parent.prototype }), arguments);
         };
     }
 
