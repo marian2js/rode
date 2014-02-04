@@ -66,94 +66,114 @@ You can simply create a new package with the command:
 
 ## <a name="models"></a>Models
 
-Models on Rode are modules really extensibles.
+Models are modules really extensible.
+The `extend` method works similar to [Backbone.js](http://backbonejs.org/#Model-extend)
 
 ```js
 var rode = require('rode');
 
-var Model = rode.getBaseModel();
-
-var Person = Model.extend({
-  name: 'Person',
-  sayHello: function () {
-    console.log('Hello Models!');
-  }
+var User = rode.Model.extend({
+  initialize: function (attrs) {
+    console.log('This is the constructor of each instance of the model');
+  },
+  getName: function () {
+    return this.get('name');
+  },
+  canAdmin: false
 });
 
-var Employee = Person.extend({
-  name: 'Employee'
+var Admin = Person.extend({
+  canAdmin: true
 });
 
-Employee.sayHello(); // Hello Models!
+var myUser = new User({ name: 'My User' });
+var myAdmin = new Admin({ name: 'My Admin' });
+
+console.log(myAdmin,getName()); // My Admin
+console.log(myUser.canAdmin) // false
+console.log(myAdmin.canAdmin) // true
 ```
 
 ## <a name="models-with-mongoose"></a>Models with Mongoose
 
-In this example we first define Person Model and their Schema:
+This is one of the best features on Rodejs.
+If you define a schema in your model, it will be fully integrated with Mongoose.
 
 ```js
 var rode = require('rode');
 
-var Model = rode.getBaseModel();
-
-var Person = Model.extend({
-  name: 'Person',
+var User = rode.Model.extend({
+  name: 'User',
+  schema: {
+    name: {
+      type: 'String',
+      unique: true
+    },
+    email: String,
+    password: String
+  }
 });
-Person.setSchema({
-  name: {
-    type: 'String',
-    unique: true
-  },
-  age: {
-    type: 'Number',
-    default: 0
+```
+You can extend this model, and their schema will be extended to.
+Both models will share the same collection on MongoDB.
+Documents of the extended models will have an attribute `_type` to differentiate.
+
+```js
+var Admin = Person.extend({
+  name: 'Admin',
+  // The schema for admins is the schema for users + their own schema
+  schema: {
+    lastAccess: Date
   }
 });
 ```
 
-Now define Employee Model and their Schema extending from Person:
+Now you can create some users and admins.
+You can call any mongoose method on the model or their instances.
+
 
 ```js
-var Employee = Person.extend({
-  name: 'Employee'
+var myUser = new User({
+  name: 'Mariano',
+  email: 'marian@example.com',
+  password: 'my password'
 });
-Employee.setSchema({
-  company: 'String'
+var myAdmin = new Admin({
+  name: 'Administrator',
+  email: 'admin@example.com',
+  password: 'my admin password',
+  lastAccess: Date.now()
 });
-```
 
-You can create some persons and employees:
+// Save the user on the collection
+myUser.save(function (err) {
 
-```js
-var john = new Person.model({
-  name: 'John',
-  age: 40
-});
-var mariano = new Employee.model({
-  name: 'Mariano Pardo',
-  age: '22',
-  company: 'Codexar'
-});
-```
+  // Save the admin on the collection
+  myAdmin.save(function (err) {
 
-And you can still using any mongoose method:
-
-```js
-// Save John on Persons
-john.save(function (err) {
-  // Save Mariano on Employees
-  mariano.save(function (err) {
-    // Get all persons (Persons + Employees)
-    Person.getAll(function (err, persons) {
-      console.log(persons);
-      // You can access to Mongoose model
-      Person.model.remove({});
-    });
+    myUser.get('_id'); // Mongo ObjectId
   });
 });
 ```
 
-We recommend having a single file for each model.
+Now if you call a Mongoose method on a model, it will be executed on its owns docs.
+For example, if you make a `find` on User Model it will return users and admins, but if you make a `find` on Admin Model, it will only return the admins
+
+```js
+// Find all, users and admins
+User.find({}, function (err, users) {
+  console.log(typeof users); // Array
+  console.log(users[0] instanceof User); // true
+});
+
+// Find only the admins
+Admin.find(function (err, admins) {
+  console.log(typeof admins); // Array
+  console.log(admins[0] instanceof Admin); // true
+});
+```
+
+You can use any mongoose method!
 
 ## <a name="controllers"></a>Controllers
 
