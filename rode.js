@@ -336,6 +336,9 @@ var rode = (function () {
 		if (config.mongo && config.mongo.autoconnect) {
 			self.getDb();
 		}
+
+		// Create rode models
+		self.Model = self.getCoreModel('Abstract', 'Model');
 	};
 
 	/**

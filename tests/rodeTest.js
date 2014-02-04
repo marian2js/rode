@@ -45,9 +45,8 @@ describe('Rode.js', function () {
 	 * Check if core models are loaded okay
 	 */
 	it('should load core model', function () {
-		var model = rode.getCoreModel('Abstract', 'Model');
-		expect(model).to.be.an('object');
-		expect(model.extend).to.be.a('function');
+		expect(rode.Model).to.be.a('function');
+		expect(rode.Model.extend).to.be.a('function');
 	});
 
 	/**

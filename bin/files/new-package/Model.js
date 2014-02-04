@@ -3,33 +3,13 @@
  */
 var rode = require('rode');
 
-var Model = rode.getBaseModel();
-
 /**
- * Main Model
+ * __PACKAGE__ Model
  */
-var __PACKAGE__ = Model.extend({
-	name: '__PACKAGE__'
+var __PACKAGE__Model = rode.Model.extend({
+	initialize: {
+        // TODO
+    }
 });
 
-/**
- * __PACKAGE__ Schema (for mongoose)
- */
-__PACKAGE__.setSchema({
-	name: String,
-	description: String
-});
-
-/**
- * Validators
- */
-__PACKAGE__.schema.path('name').validate(function (name) {
-	return name.length;
-}, 'Name cannot be blank');
-
-/**
- * Compile __PACKAGE__ Module (only needed if use MongoDB)
- */
-__PACKAGE__.compile();
-
-module.exports = __PACKAGE__;
+module.exports = __PACKAGE__Model;
