@@ -279,6 +279,9 @@ var rode = (function () {
 	var configger = function (conf) {
 		config = conf;
 
+        // Create rode models
+        self.Model = self.getCoreModel('Abstract', 'Model');
+
 		// Config Port
 		self.app.set('port', config.port || 3000);
 
@@ -336,9 +339,6 @@ var rode = (function () {
 		if (config.mongo && config.mongo.autoconnect) {
 			self.getDb();
 		}
-
-		// Create rode models
-		self.Model = self.getCoreModel('Abstract', 'Model');
 	};
 
 	/**

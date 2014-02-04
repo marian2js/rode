@@ -2,21 +2,22 @@
  * Module dependencies.
  */
 var ejs = require('ejs-locals'),
-	rode = require('../../../rode');
+    rode = require('../../../rode');
 
 var Views = rode.getCoreModel('Views');
 
-var EjsView = Views.extend((function () {
-	var self = {
-		name: 'EjsView'
-	};
+var EjsView = Views.extend({
 
-	self.configEngine = function (app, views) {
-		self.super.configEngine(app, views);
+    /**
+     * Initialize View Engine
+     *
+     * @param app
+     * @param views
+     */
+	initialize: function (app, views) {
+		this.super.configEngine(app, views);
 		app.engine('ejs', ejs);
-	};
-
-	return self;
-})());
+	}
+});
 
 module.exports = EjsView;

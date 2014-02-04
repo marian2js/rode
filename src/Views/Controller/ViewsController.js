@@ -15,7 +15,7 @@ var MainController = (function () {
 	 * Config View Engine
 	 */
 	self.configEngine = function () {
-		self.getView().configEngine(rode.app, rode.getConfig().views);
+        new self.getView()(rode.app, rode.getConfig().views);
 	};
 
 	self.compile = function (cb) {

@@ -8,19 +8,15 @@ var _path = require('path'),
 
 var Views = rode.getCoreModel('Views');
 
-var SoyView = Views.extend((function () {
-	var self = {
-		name: 'SoyView'
-	};
-
+var SoyView = Views.extend({
 	/**
-	 * Config Google Closure Templates
+	 * Initialize Google Closure Templates
 	 *
-	 * @link http://www.technology-ebay.de/the-teams/mobile-de/blog/node-js-with-express-and-closure-templates.html
 	 * @param app
 	 * @param views
+     * @link http://www.technology-ebay.de/the-teams/mobile-de/blog/node-js-with-express-and-closure-templates.html
 	 */
-	self.configEngine = function (app, views) {
+	configEngine: function (app, views) {
 		soynode.setOptions({
 			outputDir: os.tmpdir(),
 			uniqueDir: true,
@@ -41,7 +37,7 @@ var SoyView = Views.extend((function () {
 			res.locals.soynode = soynode;
 			next();
 		});
-	};
+	},
 
 	/**
 	 * Compile Google Closure Templates
@@ -49,7 +45,7 @@ var SoyView = Views.extend((function () {
 	 * @link http://www.technology-ebay.de/the-teams/mobile-de/blog/node-js-with-express-and-closure-templates.html
 	 * @param {Function} cb
 	 */
-	self.compile = function (cb) {
+	compile: function (cb) {
 		soynode.compileTemplates(rode.getConfig().views.dir, function(err) {
 			if (err) {
 				cb(err);
@@ -57,9 +53,7 @@ var SoyView = Views.extend((function () {
 			}
 			cb(null);
 		});
-	};
-
-	return self;
-})());
+	}
+});
 
 module.exports = SoyView;
