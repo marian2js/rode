@@ -9,6 +9,7 @@ Smart Packet-Oriented Framework for [Express](http://expressjs.com) and [Mongoos
 - [Packages](#packages)
 - [Models](#models)
 - [Models with Mongoose](#models-with-mongoose)
+- [Models validators](#models-validators)
 - [Controllers](#controllers)
 - [Middleware on Routes](#middleware-routes)
 - [Restful APIs](#restful-apis)
@@ -174,6 +175,43 @@ Admin.find(function (err, admins) {
 ```
 
 You can use any mongoose method!
+
+## <a name="models-validators"></a>Models validators
+
+Models support validators. You can use a custom validator as `string` or use a `function` for custom validations.
+Let's see the examples:
+
+```js
+// Create an User Model and append all the validators
+var User = rode.Model.extend({
+  validators: {
+    username: 'string',
+    emailAddress: 'email',
+    lastAccess: 'date',
+    visits: 'number',
+    password: function (password) {
+      return password.length > 6 && password.length <= 16;
+    }
+  }
+});
+
+// Create two new instances of the model and insert data
+var user1 = new User({
+  username: 'marian2js',
+  emailAddress: 'example.com',
+  password: '123456'
+});
+var user2 = new User({
+  username: 'bestUser',
+  emailAddress: 'this is not an email'
+});
+
+console.log(user1.isValid()); // true
+console.log(user2.isValid()); // false
+
+var valid = user1.set('visits', 'many');
+console.log(valid); // false
+```
 
 ## <a name="controllers"></a>Controllers
 
