@@ -212,11 +212,10 @@ var rode = (function () {
 	};
 
 	/**
-	 *
-	 * @returns {Model}
+	 * @deprecated Use rode.Model instead
 	 */
 	self.getBaseModel = function () {
-		return self.getCoreModel('Abstract', 'Model');
+		return self.Model;
 	};
 
 	/**
