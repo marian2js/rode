@@ -13,6 +13,8 @@ const ERRORS = {
 var Model = function (attrs, value) {
     var attributes = {};
     var schemaModel = {};
+    var attributesErrors = [];
+    var self = this;
 
     /**
      * Get model attribute
@@ -28,21 +30,40 @@ var Model = function (attrs, value) {
      * Set model attribute
      *
      * @param {string|object} attr
-     * @param value
-     * @returns {Model}
+     * @param [value]
+     * @returns {boolean}
      */
     this.set = function (attr, value) {
-        if (_.isObject(attr)) {
-            _.extend(attributes, attr);
-            _.extend(schemaModel, attr);
-        } else {
-            if (_.isUndefined(value)) {
-                return this;
-            }
-            attributes[attr] = value;
-            schemaModel[attr] = value;
+        if (!attr) {
+            return true;
         }
-        return this;
+        if (!_.isObject(attr)) {
+            var obj = {};
+            obj[attr] = value;
+            return self.set(obj);
+        }
+        var noErrors = true;
+        var valid;
+        for (var key in attr) {
+            valid = true;
+            if (self._class.hasValidator(key)) {
+                valid = self._class.isValid(key, attr[key]);
+                if (!valid) {
+                    noErrors = false;
+                    attributesErrors.push(key);
+                }
+            }
+            if (valid) {
+                attributes[key] = attr[key];
+                schemaModel[key] = attr[key];
+
+                // Clear errors
+                if (attributesErrors.indexOf(key) > -1) {
+                    attributesErrors = _.without(attributesErrors, key);
+                }
+            }
+        }
+        return noErrors;
     };
 
     /**
@@ -116,6 +137,19 @@ var Model = function (attrs, value) {
         return this;
     };
 
+    /**
+     * Check if an attribute or the hole object is valid
+     *
+     * @param [key]
+     * @returns {boolean}
+     */
+    this.isValid = function (key) {
+        if (key) {
+            return attributesErrors.indexOf(key) === -1;
+        }
+        return !attributesErrors.length;
+    };
+
     // if schema is defined, create schema model
     if (this._class.hasSchema()) {
         // If it is the first instance, compile the schema
@@ -175,6 +209,11 @@ Model.extend = function(protoProps, staticProps) {
     // later.
     child.__super__ = parent.prototype;
 
+    // Validators must be an object
+    if (!_.isObject(child.prototype.validators)) {
+        child.prototype.validators = {};
+    }
+
     // Add default statics methods
     addStatics(child);
 
@@ -187,14 +226,56 @@ Model.extend = function(protoProps, staticProps) {
  * @param self
  */
 var addStatics = function (self) {
-    _.extend(self, {
-        getName: function () {
-            return self.prototype.name;
-        },
-        hasSchema: function () {
-            return !!self.prototype.schema;
+    self.getName = function () {
+        return self.prototype.name;
+    };
+    self.hasSchema = function () {
+        return !!self.prototype.schema;
+    };
+
+    /**
+     * Check if an object is valid
+     *
+     * @param {string} key
+     * @param object
+     * @returns {boolean}
+     */
+    self.isValid = function (key, object) {
+        var validator = self.prototype.validators[key];
+
+        // if there is no validators defined, is valid
+        if (!validator) {
+            return true;
         }
-    });
+
+        if (_.isString(validator)) {
+            validator = getDefaultValidator(validator);
+            if (!validator) {
+                throw Error('[Error] Validator ' + validator + ' is not defined');
+            }
+        }
+        return validator(object);
+    };
+
+    /**
+     * Get a validator for an attribute
+     *
+     * @param {string} key
+     * @returns {Function}
+     */
+    self.getValidator = function (key) {
+        return self.prototype.validators[key];
+    };
+
+    /**
+     * Check if an attribute has validator
+     *
+     * @param {string} key
+     * @returns {boolean}
+     */
+    self.hasValidator = function (key) {
+        return !!self.prototype.validators[key];
+    };
 
     // if schema is defined, add support
     if (self.prototype.schema) {
@@ -534,5 +615,135 @@ var addMongooseSupport = function (self) {
 
     return schema;
 };
+
+/**
+ * Default validators
+ *
+ * @param {string} validator
+ */
+function getDefaultValidator (validator) {
+    var defaultValidators = {
+
+        /**
+         * Check if the object is not empty
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        required: function (object) {
+            return !!object;
+        },
+
+        /**
+         * Check if the object is a string
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        string: function (object) {
+            return _.isString(object);
+        },
+
+        /**
+         * Check if the object is a number
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        number: function (object) {
+            return _.isNumber(object);
+        },
+
+        /**
+         * Check if the object is a finite number
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        finite: function (object) {
+            return _.isFinite(object);
+        },
+
+        /**
+         * Check if the object is an object
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        object: function (object) {
+            return _.isObject(object);
+        },
+
+        /**
+         * Check if the object is an array
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        array: function (object) {
+            return _.isArray(object);
+        },
+
+        /**
+         * Check if the object is a function
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        'function': function (object) {
+            return _.isFunction(object);
+        },
+
+        /**
+         * Check if the object is boolean
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        boolean: function (object) {
+            return _.isBoolean(object);
+        },
+
+        /**
+         * Check if the object is a date
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        date: function (object) {
+            return _.isDate(object);
+        },
+
+        /**
+         * Check if the object is a regex
+         *
+         * @param object
+         * @returns {boolean}
+         */
+        regexp: function (object) {
+            return _.isRegExp(object);
+        },
+
+        /**
+         * Check if the object is an email
+         *
+         * @param object
+         * @returns {boolean}
+         * @link http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
+         */
+        email: function (object) {
+            if (!_.isString(object)) {
+                return false;
+            }
+            var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return regex.test(object);
+        }
+    };
+
+    if (_.isString(validator)) {
+        validator = validator.toLowerCase();
+    }
+    return defaultValidators[validator];
+}
 
 module.exports = Model;

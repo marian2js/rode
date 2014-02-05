@@ -507,4 +507,147 @@ describe('Models', function () {
             });
         });
     });
+
+    describe('validators', function () {
+        /**
+         * Check the support of the default validators
+         */
+        it('should support default validators', function () {
+            var TestModel = rode.Model.extend({
+                validators: {
+                    requiredValue: 'required',
+                    stringValue: 'String',
+                    numberValue: 'number',
+                    finiteValue: 'finite',
+                    objectValue: 'object',
+                    arrayValue: 'array',
+                    functionValue: 'function',
+                    booleanValue: 'boolean',
+                    dateValue: 'date',
+                    regexpValue: 'regexp',
+                    emailValue: 'email'
+                }
+            });
+
+            // Check if the model store correctly the validators
+            expect(TestModel.hasValidator('requiredValue')).to.be(true);
+            expect(TestModel.hasValidator('stringValue')).to.be(true);
+            expect(TestModel.hasValidator('numberValue')).to.be(true);
+            expect(TestModel.hasValidator('finiteValue')).to.be(true);
+            expect(TestModel.hasValidator('objectValue')).to.be(true);
+            expect(TestModel.hasValidator('arrayValue')).to.be(true);
+            expect(TestModel.hasValidator('functionValue')).to.be(true);
+            expect(TestModel.hasValidator('booleanValue')).to.be(true);
+            expect(TestModel.hasValidator('dateValue')).to.be(true);
+            expect(TestModel.hasValidator('regexpValue')).to.be(true);
+            expect(TestModel.hasValidator('emailValue')).to.be(true);
+
+            // Create an instance with correct attributes
+            var test = new TestModel({
+                requiredValue: true,
+                stringValue: 'this is a string',
+                numberValue: 12345,
+                finiteValue: 6789,
+                objectValue: { name: 'test', value: true },
+                arrayValue: [ 'apple', 'orange', 'banana' ],
+                functionValue: function () { },
+                booleanValue: false,
+                dateValue: new Date('02/04/2014'),
+                regexpValue: /test/i,
+                emailValue: 'email@example.com'
+            });
+
+            // Check if the attributes are valid
+            expect(test.isValid('requiredValue')).to.be(true);
+            expect(test.isValid('stringValue')).to.be(true);
+            expect(test.isValid('numberValue')).to.be(true);
+            expect(test.isValid('finiteValue')).to.be(true);
+            expect(test.isValid('objectValue')).to.be(true);
+            expect(test.isValid('arrayValue')).to.be(true);
+            expect(test.isValid('functionValue')).to.be(true);
+            expect(test.isValid('booleanValue')).to.be(true);
+            expect(test.isValid('dateValue')).to.be(true);
+            expect(test.isValid('regexpValue')).to.be(true);
+            expect(test.isValid('emailValue')).to.be(true);
+            expect(test.isValid()).to.be(true);
+
+            // Set invalid attributes
+            test.set({
+                requiredValue: '',
+                stringValue: 12345,
+                numberValue: 'this is not a number',
+                finiteValue: 'not finite',
+                objectValue: false,
+                arrayValue: true,
+                functionValue: 'not a function',
+                booleanValue: 6789,
+                dateValue: 'not a date',
+                regexpValue: false,
+                emailValue: 'email@'
+            });
+
+            // Check if the attributes are not valid
+            expect(test.isValid('requiredValue')).to.be(false);
+            expect(test.isValid('stringValue')).to.be(false);
+            expect(test.isValid('numberValue')).to.be(false);
+            expect(test.isValid('finiteValue')).to.be(false);
+            expect(test.isValid('objectValue')).to.be(false);
+            expect(test.isValid('arrayValue')).to.be(false);
+            expect(test.isValid('functionValue')).to.be(false);
+            expect(test.isValid('booleanValue')).to.be(false);
+            expect(test.isValid('dateValue')).to.be(false);
+            expect(test.isValid('regexpValue')).to.be(false);
+            expect(test.isValid('emailValue')).to.be(false);
+            expect(test.isValid()).to.be(false);
+        });
+
+        /**
+         * Check the support of the custom validators
+         */
+        it('should support custom validators', function () {
+            var PostModel = rode.Model.extend({
+                validators: {
+                    title: function (title) {
+                        return title.length > 5 && title.length < 20;
+                    },
+                    body: function (body) {
+                        return body.length > 10;
+                    },
+                    createdAt: function (createdAt) {
+                        return createdAt < Date.now();
+                    }
+                }
+            });
+
+            // Check if the model store correctly the validators
+            expect(PostModel.hasValidator('title')).to.be(true);
+            expect(PostModel.hasValidator('body')).to.be(true);
+            expect(PostModel.hasValidator('createdAt')).to.be(true);
+
+            // Create an instance with correct attributes
+            var post = new PostModel({
+                title: 'This is a title',
+                body: 'This is the body of the post',
+                createdAt: 1360024236332
+            });
+
+            // Check if the attributes are valid
+            expect(post.isValid('title')).to.be(true);
+            expect(post.isValid('body')).to.be(true);
+            expect(post.isValid('createdAt')).to.be(true);
+            expect(post.isValid()).to.be(true);
+
+            // Set invalid attributes and check if the attributes are not valid
+            expect(post.set('title', 'This is a title, but is to large...')).to.be(false);
+            expect(post.set('body', 'body')).to.be(false);
+            // This test will be valid until the year 3000 :)
+            expect(post.set('createdAt', 32503690800000)).to.be(false);
+            expect(post.isValid()).to.be(false);
+
+            // The values should be the originals
+            expect(post.get('title')).to.be('This is a title');
+            expect(post.get('body')).to.be('This is the body of the post');
+            expect(post.get('createdAt')).to.be(1360024236332);
+        });
+    });
 });
