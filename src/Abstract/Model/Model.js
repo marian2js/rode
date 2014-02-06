@@ -345,6 +345,15 @@ var addMongooseSupport = function (self) {
         };
     };
 
+    /**
+     * Check if the models is compiled
+     */
+    var checkCompiled = function () {
+        if (!self._isCompiled()) {
+            self._compile();
+        }
+    };
+
     self.getSchema = function () {
         return schema;
     };
@@ -396,6 +405,7 @@ var addMongooseSupport = function (self) {
         } else if (_.isFunction(fields)) {
             fields = getCallbackArrayDocs(fields);
         }
+        checkCompiled();
         model.find(ensureCollection(conditions), fields, options, callback);
     };
 
@@ -423,6 +433,7 @@ var addMongooseSupport = function (self) {
         } else if (_.isFunction(fields)) {
             fields = getCallbackDocument(fields);
         }
+        checkCompiled();
         model.findOne(ensureCollection(conditions), fields, options, callback);
     };
 
@@ -436,6 +447,7 @@ var addMongooseSupport = function (self) {
             callback = conditions;
             conditions = {};
         }
+        checkCompiled();
         return model.count(ensureCollection(conditions), callback);
     };
 
@@ -449,6 +461,7 @@ var addMongooseSupport = function (self) {
             callback = conditions;
             conditions = {};
         }
+        checkCompiled();
         return model.distinct(field, ensureCollection(conditions), callback);
     };
 
@@ -472,6 +485,7 @@ var addMongooseSupport = function (self) {
             update = conditions;
             conditions = {};
         }
+        checkCompiled();
         model.findOneAndUpdate(ensureCollection(conditions), update, options, callback);
     };
 
@@ -503,6 +517,7 @@ var addMongooseSupport = function (self) {
         } else if (_.isFunction(options)) {
             options = getCallbackDocument(options);
         }
+        checkCompiled();
         model.findOneAndRemove(ensureCollection(conditions), options, callback);
     };
 
@@ -525,6 +540,7 @@ var addMongooseSupport = function (self) {
      * @see http://mongoosejs.com/docs/api.html#model_Model.create
      */
     self.create = function (doc, callback) {
+        checkCompiled();
         model.create(doc, getCallbackDocument(callback));
     };
 
@@ -539,6 +555,7 @@ var addMongooseSupport = function (self) {
             callback = options;
             options = {};
         }
+        checkCompiled();
         model.update(conditions, doc, options, getCallbackDocument(callback));
     };
 
@@ -548,6 +565,7 @@ var addMongooseSupport = function (self) {
      * @see http://mongoosejs.com/docs/api.html#model_Model.mapReduce
      */
     self.mapReduce = function (o, callback) {
+        checkCompiled();
         model.mapReduce(o, getCallbackArrayDocs(callback));
     };
 
@@ -568,6 +586,7 @@ var addMongooseSupport = function (self) {
         } else if (_.isFunction(callback)) {
             callback = getCallbackArrayDocs(callback);
         }
+        checkCompiled();
         model.geoNear(near, options, callback);
     };
 
@@ -577,6 +596,7 @@ var addMongooseSupport = function (self) {
      * @see http://mongoosejs.com/docs/api.html#model_Model.aggregate
      */
     self.aggregate = function () {
+        checkCompiled();
         model.aggregate.apply(null, arguments);
     };
 
@@ -595,6 +615,7 @@ var addMongooseSupport = function (self) {
         } else if (_.isFunction(callback)) {
             callback = getCallbackArrayDocs(callback);
         }
+        checkCompiled();
         model.geoSearch(ensureCollection(conditions), options, callback);
     };
 
@@ -610,6 +631,7 @@ var addMongooseSupport = function (self) {
         } else if (_.isFunction(cb)) {
             callback = getCallbackArrayDocs(callback);
         }
+        checkCompiled();
         model.populate(docs, ensureCollection(options), callback);
     };
 
