@@ -150,6 +150,13 @@ var Model = function (attrs, value) {
         return !attributesErrors.length;
     };
 
+    /**
+     * Get the object Id
+     */
+    this.getId = function () {
+        return attributes._id;
+    };
+
     // if schema is defined, create schema model
     if (this._class.hasSchema()) {
         // If it is the first instance, compile the schema
