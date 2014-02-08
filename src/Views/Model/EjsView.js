@@ -9,13 +9,13 @@ var Views = rode.getCoreModel('Views');
 var EjsView = Views.extend({
 
     /**
-     * Initialize View Engine
+     * Config View Engine
      *
      * @param app
      * @param views
      */
-	initialize: function (app, views) {
-		this.super.configEngine(app, views);
+    configEngine: function (app, views) {
+        EjsView.__super__.configEngine(app, views);
 		app.engine('ejs', ejs);
 	}
 });

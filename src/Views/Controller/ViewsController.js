@@ -1,42 +1,41 @@
 /**
  * Module dependencies.
  */
-var _ = require('underscore'),
-	rode = require('../../../rode');
-
-var Views = rode.getCoreModel('Views');
+var rode = require('../../../rode');
 
 var MainController = (function () {
 	var self = {};
-	var View;
+    var viewModel;
+	var view;
 	var engine;
 
 	/**
 	 * Config View Engine
 	 */
 	self.configEngine = function () {
-        new self.getView()(rode.app, rode.getConfig().views);
+        view = new (self.getView())();
+        view.configEngine(rode.app, rode.getConfig().views);
 	};
 
 	self.compile = function (cb) {
-		self.getView().compile(cb);
+        view.compile(cb);
 	};
 
 	self.getView = function () {
 		self.getEngine();
-		if (!View) {
+		if (!viewModel) {
 			switch (engine) {
 				case 'ejs':
-					View = rode.getCoreModel('Views', 'EjsView');
+                    viewModel = rode.getCoreModel('Views', 'EjsView');
 					break;
 				case 'soy':
-					View = rode.getCoreModel('Views', 'SoyView');
+                    viewModel = rode.getCoreModel('Views', 'SoyView');
 					break;
 				default:
-					View = rode.getCoreModel('Views');
+                    viewModel = rode.getCoreModel('Views');
 			}
 		}
-		return View;
+		return viewModel;
 	};
 
 	self.getEngine = function () {

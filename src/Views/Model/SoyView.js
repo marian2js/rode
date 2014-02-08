@@ -10,7 +10,7 @@ var Views = rode.getCoreModel('Views');
 
 var SoyView = Views.extend({
 	/**
-	 * Initialize Google Closure Templates
+	 * Config Google Closure Templates
 	 *
 	 * @param app
 	 * @param views
