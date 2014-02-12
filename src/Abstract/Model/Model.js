@@ -157,6 +157,15 @@ var Model = function (attrs, value) {
         return attributes._id;
     };
 
+    /**
+     * get all the attributes on JSON
+     *
+     * @returns {JSON}
+     */
+    this.toJSON = function () {
+        return JSON.stringify(attributes);
+    };
+
     // if schema is defined, create schema model
     if (this._class.hasSchema()) {
         // If it is the first instance, compile the schema
