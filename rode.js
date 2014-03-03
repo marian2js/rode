@@ -278,7 +278,8 @@ var rode = (function () {
 	var configger = function (conf) {
 		config = conf;
 
-        // Create rode models
+        // Load rode components
+        self.Object = self.getCoreComponent('Core', 'Object');
         self.Model = self.getCoreModel('Abstract', 'Model');
 
 		// Config Port
