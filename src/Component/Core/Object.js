@@ -8,7 +8,14 @@ var _ = require('underscore');
  * @constructor
  */
 var Object = function (obj) {
-    return _.extend(this, obj);
+    var self = obj ? _.extend(this, obj) : this;
+
+    // Call the initialize method of the new instances
+    if (this.initialize && _.isFunction(this.initialize)) {
+        this.initialize.apply(this, arguments);
+    }
+
+    return self;
 };
 
 /**

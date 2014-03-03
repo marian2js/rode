@@ -30,4 +30,18 @@ describe('rode.Object', function () {
         expect(myInstance.getName()).to.be('my name');
         expect(MyClass.extend).to.be.a('function');
     });
+
+    /**
+     * Check if the initialize() method is called correctly
+     */
+    it('should call the initialize method of the new instances', function () {
+        var myObject = new rode.Object({
+            initialize: function () {
+                this.name = 'my name'
+            }
+        });
+        expect(myObject instanceof rode.Object).to.be(true);
+        expect(myObject.initialize).to.be.a('function');
+        expect(myObject.name).to.be('my name');
+    });
 });
