@@ -2,6 +2,7 @@ var _ = require('underscore'),
     mongoose = require('mongoose');
 require('mongoose-schema-extend');
 
+var rode = rode = require('../../../rode');
 var Schema = mongoose.Schema;
 
 // Errors //
@@ -189,7 +190,7 @@ var Model = function (attrs, value) {
 };
 
 Model.extend = function(protoProps, staticProps) {
-    var child = this.super.extend(protoProps, staticProps);
+    var child = rode.Object.extend.call(this, protoProps, staticProps);
 
     // Validators must be an object
     if (!_.isObject(child.prototype.validators)) {
@@ -281,9 +282,9 @@ var addMongooseSupport = function (self) {
     }, self.prototype.schemaOptions);
 
     // Check for super schema
-    if (!_.isEmpty(self.__super__) && self.__super__.schema) {
-        options.collection = self.__super__.constructor.getCollectionName();
-        schema = self.__super__.constructor.getSchema().extend(schema);
+    if (!_.isEmpty(self.super) && self.super.schema) {
+        options.collection = self.super.constructor.getCollectionName();
+        schema = self.super.constructor.getSchema().extend(schema);
     } else {
         schema = new Schema(schema, options);
     }
@@ -294,9 +295,9 @@ var addMongooseSupport = function (self) {
      * @param conditions
      */
     var ensureCollection = function (conditions) {
-        if(!_.isEmpty(self.__super__) && self.__super__.constructor.hasSchema()) {
-            if (!conditions[self.__super__.constructor._getDiscriminatorKey()]) {
-                conditions[self.__super__.constructor._getDiscriminatorKey()] = self.getName();
+        if(!_.isEmpty(self.super) && self.super.constructor.hasSchema()) {
+            if (!conditions[self.super.constructor._getDiscriminatorKey()]) {
+                conditions[self.super.constructor._getDiscriminatorKey()] = self.getName();
             }
         }
         return conditions;
