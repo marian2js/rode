@@ -86,4 +86,17 @@ describe('rode.Object', function () {
         expect(myInstance.status).to.be('ok');
         expect(MyChildClass.extend).to.be.a('function');
     });
+
+    it('should be cloneable', function () {
+        var MyClass = rode.Object;
+        var myInstance = new MyClass({
+            name: 'my class'
+        });
+        var myInstance2 = myInstance.clone();
+        expect(myInstance2).to.be.a(rode.Object);
+        expect(myInstance2.name).to.be('my class');
+        expect(myInstance2.clone).to.be.a('function');
+        myInstance.name = 'other class';
+        expect(myInstance2.name).to.be('my class');
+    });
 });

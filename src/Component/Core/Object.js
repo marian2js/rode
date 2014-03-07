@@ -3,12 +3,15 @@ var _ = require('underscore');
 /**
  * Creates a new object instance
  *
- * @param {Object} [obj]
+ * @param {Object} [options]
  * @returns {rode.Object}
  * @constructor
  */
-var Object = function (obj) {
-    var self = obj ? _.extend(this, obj) : this;
+var obj = function (options) {
+    var self;
+
+    // Extends this Object with the options passed as argument
+    self = options ? _.extend(this, options) : this;
 
     // Call the initialize method of the new instances
     if (this.initialize && _.isFunction(this.initialize)) {
@@ -25,7 +28,7 @@ var Object = function (obj) {
  * (c) 2011-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  * Backbone may be freely distributed under the MIT license.
  */
-Object.extend = function(protoProps, staticProps) {
+obj.extend = function(protoProps, staticProps) {
     var parent = this;
     var child;
 
@@ -61,4 +64,14 @@ Object.extend = function(protoProps, staticProps) {
     return child;
 };
 
-module.exports = Object;
+module.exports = obj.extend({
+
+    /**
+     * Returns a copy of this object
+     *
+     * @returns {rode.Object}
+     */
+    clone: function () {
+        return new this._class(_.clone(this));
+    }
+});
