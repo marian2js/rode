@@ -67,6 +67,7 @@ var Model = function (attrs, value) {
                 }
             }
         }
+        this.trigger('change');
         return noErrors;
     };
 
@@ -123,6 +124,7 @@ var Model = function (attrs, value) {
         schemaModel.save(cb);
         attributes._id = schemaModel._id;
         attributes.__v = schemaModel.__v;
+        this.trigger('save');
         return this;
     };
 
@@ -138,6 +140,7 @@ var Model = function (attrs, value) {
             throw new Error(ERRORS.no_schema);
         }
         schemaModel.remove(cb);
+        this.trigger('remove');
         return this;
     };
 
@@ -191,6 +194,7 @@ var Model = function (attrs, value) {
 
 Model.extend = function(protoProps, staticProps) {
     var child = rode.Object.extend.call(this, protoProps, staticProps);
+    child.prototype = _.extend({}, rode.Object.prototype, child.prototype);
 
     // Validators must be an object
     if (!_.isObject(child.prototype.validators)) {
