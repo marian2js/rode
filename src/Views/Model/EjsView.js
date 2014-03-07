@@ -15,7 +15,7 @@ var EjsView = Views.extend({
      * @param views
      */
     configEngine: function (app, views) {
-        EjsView.__super__.configEngine(app, views);
+        EjsView.super.configEngine(app, views);
 		app.engine('ejs', ejs);
 	}
 });
