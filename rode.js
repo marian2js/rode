@@ -280,6 +280,7 @@ var rode = (function () {
 
         // Load rode components
         self.Object = self.getCoreComponent('Core', 'Object');
+        self.List = self.getCoreComponent('Utilities', 'List');
         self.Model = self.getCoreModel('Abstract', 'Model');
 
 		// Config Port
