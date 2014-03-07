@@ -20,7 +20,7 @@ Smart Packet-Oriented Framework for [Express](http://expressjs.com) and [Mongoos
 
 Installing Rode and setting up your application:
 
-    # npm install -g rode bower grunt-cli
+    # npm install -g rode
     $ rode generate --sessions --css stylus --ejs myapp
 
 Install dependencies:

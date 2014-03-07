@@ -87,6 +87,9 @@ describe('rode.Object', function () {
         expect(MyChildClass.extend).to.be.a('function');
     });
 
+    /**
+     * Check if the Object is cloneable
+     */
     it('should be cloneable', function () {
         var MyClass = rode.Object;
         var myInstance = new MyClass({
@@ -98,5 +101,47 @@ describe('rode.Object', function () {
         expect(myInstance2.clone).to.be.a('function');
         myInstance.name = 'other class';
         expect(myInstance2.name).to.be('my class');
+    });
+
+    /**
+     * Check if a new listener can be added and triggered
+     */
+    it('should allow add event listeners', function () {
+        var MyClass = rode.Object.extend({
+            initialize: function () {
+                expect(this.on).to.be.a('function');
+                expect(this.trigger).to.be.a('function');
+
+                this.on('event', function () {
+                    this.name = 'my event';
+                });
+            }
+        });
+        var myInstance = new MyClass;
+        expect(myInstance.on).to.be.a('function');
+        expect(myInstance.trigger).to.be.a('function');
+        myInstance.trigger('event');
+        expect(myInstance.name).to.be('my event');
+        myInstance.name = 'another name';
+        myInstance.trigger('event');
+        expect(myInstance.name).to.be('my event');
+    });
+
+    /**
+     * Check if two instances have different events
+     */
+    it('should keep the events isolated between different objects', function () {
+        var myInstance = new rode.Object;
+        var myInstance2 = new rode.Object;
+        myInstance.on('event', function () {
+            this.name = 'instance 1'
+        });
+        myInstance2.on('event', function () {
+            this.name = 'instance 2'
+        });
+        myInstance.trigger('event');
+        myInstance2.trigger('event');
+        expect(myInstance.name).to.be('instance 1');
+        expect(myInstance2.name).to.be('instance 2');
     });
 });
