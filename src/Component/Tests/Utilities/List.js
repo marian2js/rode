@@ -264,4 +264,27 @@ describe('rode.List', function () {
             expect(list.without(99).equals(list)).to.be(true);
         });
     });
+
+    describe('find() and findOne()', function () {
+        it('should fine one element that match the query', function () {
+            var list = new rode.List;
+            var query = function (num) {
+                return num % 2 === 0;
+            };
+            list.add([1, 2, 3, 4, 5, 6]);
+            var even = list.findOne(query);
+            expect(even).to.be(2);
+        });
+
+        it('should find all the elements that match the query', function () {
+            var list = new rode.List;
+            var query = function (num) {
+                return num % 2 === 0;
+            };
+            list.add([1, 2, 3, 4, 5, 6]);
+            var evens = list.find(query);
+            expect(evens).to.be.a(rode.List);
+            expect(evens.equals([2, 4, 6])).to.be(true);
+        });
+    });
 });

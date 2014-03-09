@@ -18,6 +18,18 @@ var listObject = _.extend(Array.prototype, {
     },
 
     /**
+     * Set an element by position
+     *
+     * @param index
+     * @param value
+     * @returns {rode.List}
+     */
+    set: function (index, value) {
+        this[index] = value;
+        return this;
+    },
+
+    /**
      * Check if an element is in the list
      *
      * @param element
@@ -364,26 +376,26 @@ var listObject = _.extend(Array.prototype, {
     },
 
     /**
-     * Returns the first occurrence that passes the test
-     *
-     * @param predicate
-     * @param context
-     * @returns {*}
-     */
-    find: function (predicate, context) {
-        return _.find(this, predicate, context);
-    },
-
-    /**
      * Returns a new list with the occurrences that passes the test
      *
      * @param predicate
      * @param context
      * @returns {rode.List}
      */
-    filter: function (predicate, context) {
+    find: function (predicate, context) {
         var list = new rode.List;
         return list.add(_.filter(this, predicate, context));
+    },
+
+    /**
+     * Returns the first occurrence that passes the test
+     *
+     * @param predicate
+     * @param context
+     * @returns {*}
+     */
+    findOne: function (predicate, context) {
+        return _.find(this, predicate, context);
     },
 
     /**
