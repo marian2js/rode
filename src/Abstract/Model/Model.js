@@ -27,7 +27,7 @@ var Model = function (attrs, value) {
         if (key) {
             return attributes[key];
         }
-        return attributes;
+        return attributes.toObject();
     };
 
     /**
