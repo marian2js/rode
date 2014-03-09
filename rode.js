@@ -311,8 +311,8 @@ var rode = (function () {
 		switch (config.css) {
 			case 'less':
 				self.app.use(require('less-middleware')(
+                    self.getPath('statics'),
 					{
-						src: self.getPath('statics'),
 						compress: rode.env === 'production'
 					}
 				));
