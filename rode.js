@@ -201,11 +201,20 @@ var rode = (function () {
 		return require(self.packages.getCorePath(pack) + '/Model/' + model);
 	};
 
+    /**
+     *
+     * @param {string} relativePath
+     * @returns {*}
+     */
+    self.getModule = function (relativePath) {
+        return require(self.packages.getPath('') + relativePath);
+    };
+
 	/**
 	 *
 	 * @param {string} type
 	 * @param {string} name
-	 * @returns {Object}
+	 * @returns {*}
 	 */
 	self.getCoreComponent = function (type, name) {
 		return require(self.packages.getCorePath('Component') + '/' + type + '/' + name);
