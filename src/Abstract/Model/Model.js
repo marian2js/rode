@@ -584,7 +584,7 @@ var addMongooseSupport = function (self) {
      */
     self.aggregate = function () {
         checkCompiled();
-        model.aggregate.apply(null, arguments);
+        return model.aggregate.apply(model, arguments);
     };
 
     /**
