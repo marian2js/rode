@@ -2,10 +2,24 @@ var _ = require('underscore');
 var rode = require('../../../rode');
 
 /**
- * rode.List
- * Create the list extending Array.prototype
+ * Creates a clone of Array
+ *
+ * @returns {Array}
+ * @constructor
  */
-var listObject = _.extend(Array.prototype, {
+function List() {
+    var list = [];
+    list.__proto__ = List.prototype;
+    return list;
+}
+List.prototype = [];
+
+/**
+ * rode.List
+ *
+ * Create a subclass of Array.prototype
+ */
+_.extend(List.prototype, rode.Object.extend(), {
 
     /**
      * Returns an element by position
@@ -22,7 +36,7 @@ var listObject = _.extend(Array.prototype, {
      *
      * @param index
      * @param value
-     * @returns {rode.List}
+     * @returns {List}
      */
     set: function (index, value) {
         this[index] = value;
@@ -48,7 +62,7 @@ var listObject = _.extend(Array.prototype, {
      * Add elements to the list
      *
      * @param elements
-     * @returns {rode.List}
+     * @returns {List}
      */
     add: function (elements) {
         if (!_.isArray(elements)) {
@@ -174,7 +188,7 @@ var listObject = _.extend(Array.prototype, {
      * Returns everything but the last entry of the list
      *
      * @param [n]
-     * @returns {rode.List}
+     * @returns {List}
      */
     initial: function (n) {
         var list = new rode.List;
@@ -205,7 +219,7 @@ var listObject = _.extend(Array.prototype, {
     /**
      * Returns a new list with the false values removed
      *
-     * @returns {rode.List}
+     * @returns {List}
      */
     compact: function () {
         var list = new rode.List;
@@ -215,7 +229,7 @@ var listObject = _.extend(Array.prototype, {
     /**
      * Returns a new list flattened
      *
-     * @returns {rode.List}
+     * @returns {List}
      */
     flatten: function () {
         var list = new rode.List;
@@ -225,7 +239,7 @@ var listObject = _.extend(Array.prototype, {
     /**
      * Returns a new list without the specified values
      *
-     * @returns {rode.List}
+     * @returns {List}
      */
     without: function () {
         var list = new rode.List;
@@ -251,7 +265,7 @@ var listObject = _.extend(Array.prototype, {
     /**
      * Returns the list joined with the arrays specified, the join is unique
      *
-     * @returns {rode.List}
+     * @returns {List}
      */
     union: function () {
         var list = new rode.List;
@@ -261,7 +275,7 @@ var listObject = _.extend(Array.prototype, {
     /**
      * Returns the list intercepted with the arrays specified, the intersection is unique
      *
-     * @returns {rode.List}
+     * @returns {List}
      */
     intersection: function () {
         var list = new rode.List;
@@ -271,7 +285,7 @@ var listObject = _.extend(Array.prototype, {
     /**
      * Returns the list minus the arrays specified, the difference is unique
      *
-     * @returns {rode.List}
+     * @returns {List}
      */
     difference: function () {
         var list = new rode.List;
@@ -283,7 +297,7 @@ var listObject = _.extend(Array.prototype, {
      *
      * @param {boolean} isSorted
      * @param iterator
-     * @returns {rode.List}
+     * @returns {List}
      */
     unique: function (isSorted, iterator) {
         var list = new rode.List;
@@ -295,7 +309,7 @@ var listObject = _.extend(Array.prototype, {
      *
      * @param {boolean} isSorted
      * @param iterator
-     * @returns {rode.List}
+     * @returns {List}
      */
     uniq: function (isSorted, iterator) {
         return this.unique(isSorted, iterator);
@@ -303,7 +317,7 @@ var listObject = _.extend(Array.prototype, {
 
     /**
      *
-     * @returns {rode.List}
+     * @returns {List}
      */
     zip: function () {
         var list = new rode.List;
@@ -313,7 +327,7 @@ var listObject = _.extend(Array.prototype, {
     /**
      *
      * @param values
-     * @returns {rode.List}
+     * @returns {List}
      */
     object: function (values) {
         var list = new rode.List;
@@ -346,7 +360,7 @@ var listObject = _.extend(Array.prototype, {
      *
      * @param iterator
      * @param context
-     * @returns {rode.List}
+     * @returns {List}
      */
     map: function (iterator, context) {
         var list = new rode.List;
@@ -380,7 +394,7 @@ var listObject = _.extend(Array.prototype, {
      *
      * @param predicate
      * @param context
-     * @returns {rode.List}
+     * @returns {List}
      */
     find: function (predicate, context) {
         var list = new rode.List;
@@ -420,7 +434,7 @@ var listObject = _.extend(Array.prototype, {
      *
      * @param predicate
      * @param context
-     * @returns {rode.List}
+     * @returns {List}
      */
     reject: function (predicate, context) {
         var list = new rode.List;
@@ -452,7 +466,7 @@ var listObject = _.extend(Array.prototype, {
     /**
      *
      * @param methodName
-     * @returns {rode.List}
+     * @returns {List}
      */
     invoke: function (methodName) {
         var list = new rode.List;
@@ -495,7 +509,7 @@ var listObject = _.extend(Array.prototype, {
      *
      * @param iterator
      * @param context
-     * @returns {rode.List}
+     * @returns {List}
      */
     sortBy: function (iterator, context) {
         var list = new rode.List;
@@ -536,7 +550,7 @@ var listObject = _.extend(Array.prototype, {
      * Returns a shuffled copy of the list, using a version of the Fisher-Yates shuffle
      *
      * @link http://en.wikipedia.org/wiki/Fisher–Yates_shuffle
-     * @returns {rode.List}
+     * @returns {List}
      */
     shuffle: function () {
         var list = new rode.List;
@@ -575,7 +589,5 @@ function thisToArgs(that, args) {
     args.unshift(that);
     return args;
 }
-
-var List = rode.Object.extend(listObject);
 
 module.exports = List;
