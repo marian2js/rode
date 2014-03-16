@@ -152,6 +152,16 @@ var Model = function (attrs, value) {
     };
 
     /**
+     * Set the mongoose model for this model
+     *
+     * @param _schemaModel
+     * @private
+     */
+    this._setSchemaModel = function (_schemaModel) {
+        schemaModel = _schemaModel;
+    };
+
+    /**
      * Check if an attribute or the hole object is valid
      *
      * @param [key]
@@ -317,7 +327,9 @@ var addMongooseSupport = function (self) {
     var getCallbackDocument = function (callback) {
         return function () {
             if (arguments[1]) {
-                arguments[1] = new self(arguments[1]);
+                var model = new self(arguments[1].toObject());
+                model._setSchemaModel(arguments[1]);
+                arguments[1] = model;
             }
             callback.apply(null, arguments);
         };
@@ -329,7 +341,9 @@ var addMongooseSupport = function (self) {
                 var models = [];
                 arguments[1].forEach(function (doc) {
                     if (doc) {
-                        models.push(new self(doc));
+                        var model = new self(doc.toObject());
+                        model._setSchemaModel(doc);
+                        models.push(model);
                     }
                 });
                 arguments[1] = models
