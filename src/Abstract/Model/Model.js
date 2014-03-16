@@ -27,7 +27,7 @@ var Model = function (attrs, value) {
         if (key) {
             return attributes[key];
         }
-        return attributes.toObject();
+        return attributes;
     };
 
     /**
@@ -67,6 +67,12 @@ var Model = function (attrs, value) {
                 }
             }
         }
+
+        // This is useful for Mongoose's relationships
+        if (attr['_id']) {
+            this._id = attr['_id'];
+        }
+
         this.trigger('change');
         return noErrors;
     };
@@ -124,6 +130,7 @@ var Model = function (attrs, value) {
         schemaModel.save(cb);
         attributes._id = schemaModel._id;
         attributes.__v = schemaModel.__v;
+        this._id = schemaModel._id;
         this.trigger('save');
         return this;
     };
