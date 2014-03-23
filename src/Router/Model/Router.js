@@ -60,10 +60,10 @@ var Router = {
 	remove: function (pack, route) {
 		this.routes[pack].forEach(function (route) {
 			if (needle.action && needle.action === route.action) {
-				delete route;
+				route = null;
 			}
 			else if (needle.pattern && needle.pattern === route.pattern) {
-				delete route;
+				route = null;
 			}
 		});
 	},

@@ -26,7 +26,14 @@ var RoutingController = function (cb) {
 	var createRoutes = function (pack) {
 		var packRouter = rode.getRouter(pack),
 			routePath = _path.join(rode.packages.getPath(pack), 'routes.js');
-		require(routePath);
+
+        // A package may not have routes
+        try {
+            require(routePath);
+        } catch (e) {
+            return;
+        }
+
 		packRouter.forEach(function (route) {
 			var routePath = packRouter.getPath(route.action),
 				controller = rode.getController(pack, route.controller),
