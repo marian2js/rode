@@ -1,0 +1,15 @@
+{
+  "fake_option": 123456,
+  "fake_array": [
+    {
+      "item1": 1,
+      "item2": 2,
+      "item3": 3
+    },
+    {
+      "item1": 4,
+      "item2": 5,
+      "item3": 6
+    }
+  ]
+}
