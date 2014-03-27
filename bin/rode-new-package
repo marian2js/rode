@@ -24,31 +24,4 @@ if (!rootPath) {
 	utils.errorNotRode(path);
 }
 
-rode.start(rootPath, function (err) {
-	if (err) {
-		throw err;
-	}
-
-	// Get Packages
-	var packages = program.args;
-
-	// If there are no packages, error
-	if (!packages.length) {
-		utils.abort('Error: Packages required');
-	}
-
-	// Add all packages
-	packages.forEach(function (pack) {
-		try {
-			rode.packages.add(pack, program.rest, program.force);
-		}
-		catch (e) {
-			if (e.message === 'Path not empty') {
-				utils.abort('Error: Package "' + pack + '" already exists, use --force to continue.');
-			}
-			else {
-				utils.abort('Error: ' + e.message);
-			}
-		}
-	});
-});
+// TODO
