@@ -1,7 +1,7 @@
 {
   "name": "rode",
-  "description": "Smart Packet-Oriented Framework for Express and Mongoose.",
-  "version": "0.2.5",
+  "description": "Packet-Oriented Framework for ES6 and Express.",
+  "version": "0.3.0-alpha",
   "author": "Mariano Pardo (Codexar)",
   "dependencies": {
     "express": ">= 3 < 4",
@@ -18,7 +18,11 @@
     "less-middleware": "latest",
     "hjs": "latest",
     "soynode": "latest",
-    "ejs-locals": "~1.0.2"
+    "ejs-locals": "~1.0.2",
+    "traceur": "0.0.31",
+    "q": "^1.0.1",
+    "es6-shim": "^0.10.1",
+    "es6-module-loader": "^0.5.3"
   },
   "devDependencies": {
     "expect.js": "latest",
@@ -40,7 +44,7 @@
     "boilerplate",
     "mvc",
     "express",
-    "mongoose",
+    "es6",
     "rest",
     "restful",
     "model",
