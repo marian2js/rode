@@ -20,7 +20,6 @@
     "soynode": "latest",
     "ejs-locals": "~1.0.2",
     "traceur": "0.0.31",
-    "q": "^1.0.1",
     "es6-shim": "^0.10.1",
     "es6-module-loader": "^0.5.3"
   },
@@ -30,7 +29,7 @@
     "grunt": "latest"
   },
   "repository": "git://github.com/codexar/rode",
-  "main": "rode",
+  "main": "index",
   "scripts": {
     "prepublish": "npm prune"
   },
