@@ -193,7 +193,7 @@ export class Router {
       }
       routes.push({
         controller: controllerName,
-        pattern: routePath,
+        pattern: path.join(this.restApi, routePath),
         action: action,
         method: method
       });
