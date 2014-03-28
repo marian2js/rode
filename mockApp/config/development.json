@@ -1,3 +1,18 @@
 {
-
+  "baseUri": "http://localhost",
+  "port": 3000,
+  "srcPath": "src",
+  "statics": {
+    "path": "public",
+    "images": "images",
+    "js": "js",
+    "css": "css"
+  },
+  "css": "less",
+  "views": {
+    "path": "views",
+    "engine": "ejs"
+  },
+  "bodyParser": true,
+  "useErrorHandler": false
 }
