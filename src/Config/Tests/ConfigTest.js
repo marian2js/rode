@@ -4,7 +4,7 @@ import { Config } from '../Config';
 
 describe('Config', () => {
   // mock app with .json options
-  var fakePath = path.join(__dirname, 'mockApp');
+  var fakePath = path.join(__rodeBase, 'mockApp');
 
   it('should allow to be newed', () => {
     var config = new Config(fakePath);
