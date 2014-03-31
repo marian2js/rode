@@ -100,6 +100,9 @@ export class Server {
    * @param {Router} router
    */
   addRoutes(router) {
+    if (!router) {
+      return;
+    }
     router.forEach(route => {
       this.count++;
       var controller = router.pack.getController(route.controller);
