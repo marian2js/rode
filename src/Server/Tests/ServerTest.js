@@ -66,5 +66,27 @@ describe('Server', () => {
 
   });
 
+  describe('Running and stopping the server', () => {
+    var server = new Server;
+    var fakePath = path.join(__rodeBase, 'mockApp');
+    var core = new Core(fakePath);
+
+    it('should run the server on specified port', done => {
+      server.config(core);
+      server.run()
+        .then(() => {
+          expect(server.isRunning).to.be(true);
+          done();
+        })
+        .done();
+    });
+
+    it('should stop the server', () => {
+      server.stop();
+      expect(server.isRunning).to.be(false);
+    });
+
+  });
+
 });
 

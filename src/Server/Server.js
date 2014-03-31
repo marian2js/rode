@@ -9,6 +9,7 @@ export class Server {
   constructor() {
     this.express = express;
     this.app = express();
+    this.isRunning = false;
   }
 
   /**
@@ -18,11 +19,28 @@ export class Server {
    */
   run() {
     return new Promise(resolve => {
-      http.createServer(this.app)
+      if (this.isRunning) {
+        resolve();
+        return;
+      }
+      this.server = http.createServer(this.app)
           .listen(this.app.get('port'), () => {
+            this.isRunning = true;
             resolve();
           });
     });
+  }
+
+  /**
+   * Stop the app
+   */
+  stop() {
+    if (!this.isRunning) {
+      resolve();
+      return;
+    }
+    this.server.close();
+    this.isRunning = false;
   }
 
   /**
