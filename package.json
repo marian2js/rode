@@ -19,9 +19,11 @@
     "hjs": "latest",
     "soynode": "latest",
     "ejs-locals": "~1.0.2",
+    "request": "^2.34.0",
     "traceur": "0.0.31",
     "es6-shim": "^0.10.1",
-    "es6-module-loader": "^0.5.3"
+    "es6-module-loader": "^0.5.3",
+    "prfun": "^0.1.0"
   },
   "devDependencies": {
     "expect.js": "latest",

@@ -4,6 +4,7 @@ var traceur = require('traceur');
 var path = require('path');
 require('es6-shim');
 require('es6-module-loader');
+require('prfun');
 
 // base path
 global.__rodeBase = __dirname;
