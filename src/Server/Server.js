@@ -128,6 +128,11 @@ export class Server {
       var call = controllerInstance[route.action];
       var pattern = path.join(router.base, route.pattern);
 
+      // Add api prefix to REST routes
+      if (route.isRestful) {
+        pattern = path.join(router.restApi, pattern);
+      }
+
       // Fix routes patterns across the different OS.
       if (pattern.indexOf('\\') !== -1) {
         pattern = S(pattern).replaceAll('\\', '/').s;

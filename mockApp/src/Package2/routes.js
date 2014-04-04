@@ -1,8 +1,8 @@
 import { Router } from '../../../loader';
 
 var router = new Router();
-router.base = '/pack2';
 router.restApi = '/api/';
+router.base = '/pack2';
 
 /**
  * [GET] /pack2

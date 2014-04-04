@@ -187,15 +187,16 @@ export class Router {
     for (var action in controller.prototype) {
       method = action.match(/[a-z]+/)[0];
       parts = S(action).replaceAll('ById','Byid').s.match(/[A-Z][a-z]+/g);
-      routePath = path.join(this.base, Router.transformRestRoute(parts));
+      routePath = Router.transformRestRoute(parts);
       if (routePath.endsWith('/')) {
         routePath = routePath.substring(0, routePath.length - 1);
       }
       routes.push({
         controller: controllerName,
-        pattern: path.join(this.restApi, routePath),
+        pattern: routePath,
         action: action,
-        method: method
+        method: method,
+        isRestful: true
       });
     }
 
@@ -212,7 +213,7 @@ export class Router {
   }
 
   /**
-   * Return the number of routes
+   * Returns the number of routes
    *
    * @return {number}
    */
@@ -220,6 +221,11 @@ export class Router {
     return this.routes.length;
   }
 
+  /**
+   * Returns if the route is restful
+   *
+   * @return {boolean}
+   */
   get isRestful() {
     return !!this.restApi;
   }

@@ -85,7 +85,6 @@ describe('Router', () => {
       expect(packRouter.restRoutes).to.be.an(Array);
       packRouter.restRoutes.forEach(route => {
         expect(route.controller).to.be.ok();
-        expect(route.pattern).to.be.ok();
         expect(route.action).to.be.ok();
         expect(route.method).to.be.ok();
       });
