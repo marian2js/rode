@@ -45,6 +45,15 @@ export class Core {
   }
 
   /**
+   * Stop the app
+   *
+   * @returns {Promise}
+   */
+  stop() {
+    return this.server.stop();
+  }
+
+  /**
    * Get path for a resource
    *
    * @param {string} name

@@ -1,6 +1,6 @@
 var path = require('path');
-var http = require('http');
 var expect = require('expect.js');
+var request = require('request');
 import { Core } from '../Core';
 import { PackageList } from '../../Package/PackageList';
 
@@ -100,6 +100,102 @@ describe('Core', () => {
     });
   });
 
+  describe('Run app', () => {
+    var core = new Core(fakePath);
+    core.packageList = new PackageList;
+    var protocol;
+    var host;
+    var port;
 
+    /**
+     * Run the server and config protocol, host and port
+     */
+    beforeEach(done => {
+      core.run()
+        .then(() => {
+          protocol = 'http';
+          host = core.options.get('host');
+          port = core.options.get('port');
+        })
+        .done(done);
+    });
+
+    /**
+     * Stop the server
+     */
+    afterEach(() => {
+      if (core.server.isRunning) {
+        core.stop();
+      }
+    });
+
+    /**
+     * Test if the host and port are set correctly
+     */
+    it('should run the app on specified host and port', () => {
+      expect(core.app.get('port')).to.be(core.options.get('port'));
+      expect(core.options.get('port')).to.be(3000);
+      expect(core.options.get('host')).to.be('localhost');
+    });
+
+    /**
+     * Test if [GET] http://localhost:3000/ is accessible
+     */
+    it('should respond to any route with method GET', done => {
+      var options = {
+        uri: `${protocol}://${host}:${port}`
+      };
+      request(options, (err, res, body) => {
+        expect(err).to.be(null);
+        expect(body).to.be('[GET] /');
+        done();
+      });
+    });
+
+    /**
+     * Test if [POST] http://localhost:3000/another is accessible
+     */
+    it('should respond to any route with method POST', done => {
+      var options = {
+        uri: `${protocol}://${host}:${port}/another`,
+        method: 'POST'
+      };
+      request(options, (err, res, body) => {
+        expect(err).to.be(null);
+        expect(body).to.be('[POST] /another');
+        done();
+      });
+    });
+
+    /**
+     * Test if [GET] http://localhost:3000/api/pack2 is accessible
+     */
+    it('should respond to any REST route with method GET', done => {
+      var options = {
+        uri: `${protocol}://${host}:${port}/api/pack2`
+      };
+      request(options, (err, res, body) => {
+        expect(err).to.be(null);
+        expect(body).to.be('[GET] /api/pack2');
+        done();
+      });
+    });
+
+    /**
+     * Test if [POST] http://localhost:3000/api/pack2 is accessible
+     */
+    it('should respond to any REST route with method POST', done => {
+      var options = {
+        uri: `${protocol}://${host}:${port}/api/pack2`,
+        method: 'POST'
+      };
+      request(options, (err, res, body) => {
+        expect(err).to.be(null);
+        expect(body).to.be('[POST] /api/pack2');
+        done();
+      });
+    });
+
+  });
 
 });
