@@ -5,6 +5,7 @@ import { PackageList } from './src/Package/PackageList';
 import { Package } from './src/Package/Package';
 import { Router } from './src/Router/Router';
 import { List } from './src/Util/List';
+import { Observable } from './src/MVC/Observable';
 
 // Find the app root path
 var rootPath = path.resolve(__dirname, '../../');
