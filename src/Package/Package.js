@@ -58,18 +58,30 @@ export class Package {
   /**
    * Check if the package exists
    *
+   * @param {string} [resourcePath]
    * @return {Promise}
    */
-  exists() {
-    return new Promise(resolve => fs.exists(this.path, resolve));
+  exists(resourcePath) {
+    if (resourcePath) {
+      resourcePath = path.join(this.path, resourcePath);
+    } else {
+      resourcePath = this.path;
+    }
+    return new Promise(resolve => fs.exists(resourcePath, resolve));
   }
 
   /**
    * Check if the package exists synchronously
    *
+   * @param {string} [resourcePath]
    * @return {boolean}
    */
-  existsSync() {
-    return fs.existsSync(this.path);
+  existsSync(resourcePath) {
+    if (resourcePath) {
+      resourcePath = path.join(this.path, resourcePath);
+    } else {
+      resourcePath = this.path;
+    }
+    return fs.existsSync(resourcePath);
   }
 }

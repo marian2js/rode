@@ -96,6 +96,37 @@ describe('Package', () => {
       expect(pack2.existsSync()).to.be(false);
     });
 
+    /**
+     * Test if exists works with specific resources
+     */
+    it('should check if a resource exists', done => {
+      var count = 0;
+      var expected = 2;
+      var checkDone = function () {
+        if (++count === expected) {
+          done();
+        }
+      };
+      pack.exists('Controller/AnotherController.js')
+        .then(exists => {
+          expect(exists).to.be(true);
+          checkDone();
+        });
+      pack.exists('NON EXISTENT RESOURCE')
+        .then(exists => {
+          expect(exists).to.be(false);
+          checkDone();
+        });
+    });
+
+    /**
+     * Test if exists works with specific resources synchronously
+     */
+    it('should check if a resource exists synchronously', () => {
+      expect(pack.existsSync('Controller/AnotherController.js')).to.be(true);
+      expect(pack.existsSync('NON EXISTENT RESOURCE')).to.be(false);
+    });
+
   });
 
 });
