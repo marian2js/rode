@@ -2,7 +2,7 @@ var path = require('path');
 var _ = require('underscore');
 var S = require('string');
 import { List } from '../Util/List';
-import { InvalidParameterError } from '../Error/InvalidParameterError';
+import { InvalidParamsError } from '../Error/InvalidParamsError';
 
 export class Router {
 
@@ -15,11 +15,11 @@ export class Router {
    *
    * @param route
    * @return {Router}
-   * @throws InvalidParameterError
+   * @throws InvalidParamsError
    */
   add(route) {
     if (!route.action) {
-      throw new InvalidParameterError('Route requires an action');
+      throw new InvalidParamsError('Route requires an action');
     }
 
     // default parameters
