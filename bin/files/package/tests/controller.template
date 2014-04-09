@@ -2,12 +2,12 @@ var expect = require('expect.js');
 import { {{ controller | capitalize }}Controller } from '../../Controller/{{ controller }}Controller';
 
 describe('{{ controller | capitalize }}Controller', () => {
-  var {{ controller | camelize }};
+  var {{ controller | camelize }}Controller;
 
-  beforeEach(() => {{ controller | camelize }} = new {{ controller | capitalize }});
+  beforeEach(() => {{ controller | camelize }}Controller = new {{ controller | capitalize }}Controller);
 
   /**
-   * Test if {{ controller | camelize }}.index render a view correctly
+   * Test if {{ controller | camelize }}Controller.index render a view correctly
    */
   it('should render a view with the title "Index of {{ package }}"', done => {
     var req = {};
@@ -19,7 +19,7 @@ describe('{{ controller | capitalize }}Controller', () => {
         done();
       }
     };
-    {{ controller | camelize }}.index(req, res);
+    {{ controller | camelize }}Controller.index(req, res);
   });
 
 });
