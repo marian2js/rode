@@ -1,51 +1,30 @@
 #!/usr/bin/env node
 
-/**
- * Based on Express.
- * Original Source: https://github.com/visionmedia/express/blob/master/bin/express
- * License: https://github.com/visionmedia/express/blob/master/LICENSE
- */
+var commander = require('commander');
+var rode = require('../index');
+var utils = require('./helpers/utils').utils;
 
-/**
- * Module dependencies.
- */
-var program = require('commander'),
-	S = require('string'),
-	os = require('os'),
-	fs = require('extfs'),
-	utils = require('./console-utils'),
-	pkg = require('../package.json'),
-	version = pkg.version;
-
-// CLI
-program._name = 'rode generate';
-program
-	.usage('[options] [dir]')
-	.option('-s, --sessions', 'add session support')
-	.option('-e, --ejs', 'add ejs engine support (defaults to jade)')
-	//.option('-J, --jshtml', 'add jshtml engine support (defaults to jade)')
-	.option('-H, --hogan', 'add hogan.js engine support')
-	.option('-S, --soy', 'add Google Closure Templates engine support')
-	.option('-c, --css <engine>', 'add stylesheet <engine> support (less|stylus) (defaults to plain css)')
-	.option('-f, --force', 'force on non-empty directory')
+commander._name = 'rode generate';
+commander
+	.usage('<component> <name>')
+	.option('-r, --rest', 'create a REST api for this package or controller')
+	.option('-f, --force', 'force on existent package')
 	.parse(process.argv);
 
 // Path
-var path = program.args.shift() || '.';
-var filesPath = __dirname + '/files/generate/';
+var path = utils.extractPath(commander.args) || '.';
+var rootPath = utils.findRootPath(path);
+var component = commander.args.shift();
+var names = commander.args;
 
-// end-of-line code
-var eol = os.EOL;
+if (!names.length) {
+  utils.exit('Error: The name for the new component is not defined');
+}
 
-// Template engine
-program.template = 'jade';
-if (program.ejs) program.template = 'ejs';
-//if (program.jshtml) program.template = 'jshtml';
-if (program.hogan) program.template = 'hjs';
-if (program.soy) program.template = 'soy';
-
-// Accepted Version
-var vers = version.split('.');
-var acceptedVersion = vers[0] + '.' + vers[1] + '.x';
-
-// TODO
+for (var i = 0, len = names.length; i < len; i++) {
+  try {
+    utils.generateComponent(component.toLowerCase(), names[i], rootPath);
+  } catch (e) {
+    utils.exit(e);
+  }
+}

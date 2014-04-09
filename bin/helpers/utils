@@ -1,0 +1,117 @@
+var _path = require('path');
+var mkdirp = require('mkdirp');
+var S = require('string');
+var fs = require('extfs');
+import { Package } from '../../src/Package/Package';
+import { PackageGenerator } from '../../src/Generator/PackageGenerator';
+
+export var utils = {
+
+  generateComponent(component, name, rootPath) {
+    var filesPath = _path.join(__dirname, '../files');
+    var _package;
+    var packageName;
+    var packagePath;
+    var packageGenerator;
+
+    // find the package name
+    if (component.toLowerCase() === 'package') {
+      packageName = name;
+    } else if (~component.indexOf(':')) {
+      packageName = component.split(':')[0];
+      component = component.split(':')[1];
+    } else {
+      throw Error(`The component ${component} is not valid`);
+    }
+
+    packagePath = _path.join(rootPath, 'src', packageName);
+    _package = new Package(packageName, packagePath);
+
+    // If we are not generating a package, this should exist
+    if (component.toLowerCase() !== 'package' && !_package.existsSync()) {
+      throw Error(`The package '${packageName}' does not exist`);
+    }
+
+    packageGenerator = new PackageGenerator(_package, filesPath);
+    switch (component) {
+      case 'package':
+        packageGenerator.create();
+        break;
+      case 'controller':
+        packageGenerator.createController(name);
+        break;
+      case 'model':
+        packageGenerator.createModel(name);
+        break;
+      case 'routes':
+        packageGenerator.createRoutes();
+        break;
+      default:
+        this.exit(`The component ${component} is not valid`);
+    }
+  },
+
+  /**
+   * Extract the path from an array
+   *
+   * @param array
+   * @returns {string} path
+   */
+  extractPath(array) {
+    var count = array.length;
+    for (var i = 0; i < count; i++) {
+      if (array[i][0] === '/') {
+        return array.splice(i, 1)[0];
+      }
+    }
+    return null;
+  },
+
+  /**
+   * Find root path for app
+   *
+   * @param [path]
+   * @returns {string} path
+   */
+  findRootPath(path) {
+    if (!path) {
+      path = __dirname;
+    }
+    var err = false;
+    while (path !== '/') {
+      path = _path.resolve(path);
+      if (this.isRootPath(path)) {
+        return path;
+      }
+      path = _path.join(path, '../');
+    }
+    return null;
+  },
+
+  /**
+   * Check if path is the root path of the app
+   *
+   * @param path
+   * @returns {boolean}
+   */
+  isRootPath(path) {
+    var files = fs.readdirSync(path);
+    return files.indexOf('package.json') !== -1 && files.indexOf('config') !== -1;
+  },
+
+  /**
+   * Set error when no installation is detected
+   *
+   * @param path
+   */
+  errorNotRode(path) {
+    this.exit(`Can not find a rode.js installation in ${_path.resolve(path)}`);
+  },
+
+  exit(error) {
+    if (error) {
+      console.error(`  \x1b[31m${error}\x1b[0m`);
+    }
+    process.exit(1);
+  }
+};

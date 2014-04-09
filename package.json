@@ -38,7 +38,7 @@
   "bin": {
     "rode": "./bin/rode",
     "rode-generate": "./bin/rode-generate",
-    "rode-new-package": "./bin/rode-new-package"
+    "rode-new-package": "./bin/rode-new"
   },
   "keywords": [
     "framework",

@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+
+/**
+ * Based on Express.
+ * Original Source: https://github.com/visionmedia/express/blob/master/bin/express
+ * License: https://github.com/visionmedia/express/blob/master/LICENSE
+ */
+
+/**
+ * Module dependencies.
+ */
+var program = require('commander'),
+	S = require('string'),
+	os = require('os'),
+	fs = require('extfs'),
+	utils = require('./helpers/utils'),
+	pkg = require('../package.json'),
+	version = pkg.version;
+
+// CLI
+program._name = 'rode generate';
+program
+	.usage('[options] [dir]')
+	.option('-s, --sessions', 'add session support')
+	.option('-e, --ejs', 'add ejs engine support (defaults to jade)')
+	//.option('-J, --jshtml', 'add jshtml engine support (defaults to jade)')
+	.option('-H, --hogan', 'add hogan.js engine support')
+	.option('-S, --soy', 'add Google Closure Templates engine support')
+	.option('-c, --css <engine>', 'add stylesheet <engine> support (less|stylus) (defaults to plain css)')
+	.option('-f, --force', 'force on non-empty directory')
+	.parse(process.argv);
+
+// Path
+var path = program.args.shift() || '.';
+var filesPath = __dirname + '/files/';
+
+// end-of-line code
+var eol = os.EOL;
+
+// Template engine
+program.template = 'jade';
+if (program.ejs) program.template = 'ejs';
+//if (program.jshtml) program.template = 'jshtml';
+if (program.hogan) program.template = 'hjs';
+if (program.soy) program.template = 'soy';
+
+// Accepted Version
+var vers = version.split('.');
+var acceptedVersion = vers[0] + '.' + vers[1] + '.x';
+
+// TODO

@@ -1,14 +1,11 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
 var program = require('commander');
-
 var pkg = require('../package.json');
 
 program
-	.version(pkg.version)
-	.command('generate [options] [dir]', 'Generate new project')
-	.command('new-package <package>', 'Create a new package on the project')
-	.parse(process.argv);
+  .version(pkg.version)
+  .command('new [options] [dir]', 'Create a new project')
+  .command('generate <component>', 'Create a new component (package, controller, model)')
+  .parse(process.argv);
+
