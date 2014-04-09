@@ -1,0 +1,25 @@
+var expect = require('expect.js');
+import { {{ controller | capitalize }}Controller } from '../../Controller/{{ controller }}Controller';
+
+describe('{{ controller | capitalize }}Controller', () => {
+  var {{ controller | camelize }};
+
+  beforeEach(() => {{ controller | camelize }} = new {{ controller | capitalize }});
+
+  /**
+   * Test if {{ controller | camelize }}.index render a view correctly
+   */
+  it('should render a view with the title "Index of {{ package }}"', done => {
+    var req = {};
+    var res = {
+      render: function (view, data) {
+        expect(view).to.be('{{ package }}/index');
+        expect(data).to.be.an(Object);
+        expect(data.title).to.be('Index of {{ package }}');
+        done();
+      }
+    };
+    {{ controller | camelize }}.index(req, res);
+  });
+
+});

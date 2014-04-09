@@ -1,0 +1,12 @@
+export class {{ controller | capitalize }}Controller {
+
+  /**
+   * Index Action
+   */
+  index(req, res) {
+    res.render('{{ package }}/index', {
+      {{ templateAction }}title: 'Index of {{ package }}'
+    });
+  }
+
+}

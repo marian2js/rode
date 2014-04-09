@@ -1,0 +1,16 @@
+var expect = require('expect.js');
+import { {{ model | capitalize }} } from '../../Model/{{ model }}';
+
+describe('{{ model | capitalize }}', () => {
+  var {{ model | camelize }};
+
+  beforeEach(() => {{ model | camelize }} = new {{ model | capitalize }});
+
+  /**
+   * Test if a string is converted to upper case
+   */
+  it('should convert a string in upper case', () => {
+    expect({{ model | camelize }}.sampleMethod('test')).to.be('TEST');
+  });
+
+});

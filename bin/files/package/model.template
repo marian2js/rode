@@ -1,0 +1,14 @@
+
+/**
+ * {{ model | capitalize }} Model
+ */
+export class {{ model | capitalize }} {
+
+  /**
+   * Sample method, converts a string to upper case
+   */
+  sampleMethod(str) {
+    return str.toUpperCase();
+  }
+
+}

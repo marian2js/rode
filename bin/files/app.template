@@ -1,0 +1,32 @@
+var rode = require('rode');
+var path = require('path');
+var traceur = require('traceur');
+
+/******************************************************
+ * WARNING: This is the only file that not support ES6
+ ******************************************************/
+
+// Config which files will be compiled with ES6
+traceur.require.makeDefault(function(filename) {
+  if (filename.startsWith(path.join(__dirname, 'src'))) {
+    return true;
+  }
+  return filename.endsWith('.es6.js');
+});
+
+/**
+ * [Optional] Config your app using Express
+ *
+ * @param app = express()
+ */
+rode.config(function (app) {
+
+});
+
+/**
+ * Run the server (by default on localhost:3000)
+ */
+rode.run()
+  .then(function () {
+    console.log('Server started on ' + rode.env + '!');
+  });
