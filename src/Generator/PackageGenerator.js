@@ -3,6 +3,7 @@ var mkdirp = require('mkdirp');
 var fs = require('fs');
 var S = require('string');
 import { Package } from '../Package/Package';
+import { FileExistsError } from '../Error/FileExistsError';
 
 export class PackageGenerator {
 
@@ -17,8 +18,13 @@ export class PackageGenerator {
 
   /**
    * Create a new package
+   *
+   * @throws FileExistsError
    */
   create() {
+    if (!this.force && this.package.existsSync()) {
+      throw new FileExistsError(`Package: "${this.package.name}"`);
+    }
     this.createController();
     this.createModel();
     this.createRoutes();
@@ -28,6 +34,7 @@ export class PackageGenerator {
    * Create a new controller
    *
    * @param {string} [name]
+   * @throws FileExistsError
    */
   createController(name = this.package.name) {
     var template = this._getTemplate('package/controller');
@@ -39,6 +46,9 @@ export class PackageGenerator {
       name = name.slice(0, -10);
     }
 
+    if (!this.force && this.package.existsSync(`Controller/${name}Controller.js`)) {
+      throw new FileExistsError(`Controller "${name}"`);
+    }
     templateVars.controller = new PackageGenerator._templateVar(name);
     this._write(`Controller/${name}Controller.js`, PackageGenerator._renderTemplate(template, templateVars));
     this._write(`Tests/Controller/${name}ControllerTest.js`, PackageGenerator._renderTemplate(testTemplate, templateVars));
@@ -51,11 +61,16 @@ export class PackageGenerator {
 
   /**
    * Create a new REST controller
+   *
+   * @throws FileExistsError
    */
   createRestController() {
     var template = this._getTemplate('package/restcontroller');
     var testTemplate = this._getTemplate('package/tests/restcontroller');
     var templateVars = this._defaultTemplateVars;
+    if (!this.force && this.package.existsSync('Controller/RestController.js')) {
+      throw new FileExistsError('Controller "RestController"');
+    }
     this._write(`Controller/RestController.js`, PackageGenerator._renderTemplate(template, templateVars));
     this._write(`Tests/Controller/RestControllerTest.js`, PackageGenerator._renderTemplate(testTemplate, templateVars));
   }
@@ -64,11 +79,15 @@ export class PackageGenerator {
    * Create a new model
    *
    * @param {string} [name]
+   * @throws FileExistsError
    */
   createModel(name = this.package.name) {
     var template = this._getTemplate('package/model');
     var testTemplate = this._getTemplate('package/tests/model');
     var templateVars = this._defaultTemplateVars;
+    if (!this.force && this.package.existsSync(`Model/${name}.js`)) {
+      throw new FileExistsError(`Model "${name}"`);
+    }
     templateVars.model = new PackageGenerator._templateVar(name);
     this._write(`Model/${name}.js`, PackageGenerator._renderTemplate(template, templateVars));
     this._write(`Tests/Model/${name}Test.js`, PackageGenerator._renderTemplate(testTemplate, templateVars));
@@ -76,10 +95,15 @@ export class PackageGenerator {
 
   /**
    * Create a new routes file
+   *
+   * @throws FileExistsError
    */
   createRoutes() {
     var template = this._getTemplate('package/routes');
     var templateVars = this._defaultTemplateVars;
+    if (!this.force && this.package.existsSync('routes.js')) {
+      throw new FileExistsError('"routes.js"');
+    }
     this._write('routes.js', PackageGenerator._renderTemplate(template, templateVars));
   }
 

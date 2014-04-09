@@ -3,6 +3,7 @@
 var commander = require('commander');
 var rode = require('../index');
 var utils = require('./helpers/utils').utils;
+var FileExistsError = require('../loader').FileExistsError;
 
 commander._name = 'rode generate';
 commander
@@ -17,11 +18,20 @@ var rootPath = utils.findRootPath(path);
 var component = commander.args.shift();
 var names = commander.args;
 var rest = !!commander.rest;
+var force = !!commander.force;
 
 if (!names.length) {
   utils.exit('Error: The name for the new component is not defined');
 }
 
 for (var i = 0, len = names.length; i < len; i++) {
-  utils.generateComponent(component, names[i], rootPath, rest);
+  try {
+    utils.generateComponent(component, names[i], rootPath, rest, force);
+  } catch (e) {
+    if (e instanceof FileExistsError) {
+      utils.exit(e.message + ' already exists, use --force to overwrite it.');
+    } else {
+      utils.exit(e);
+    }
+  }
 }

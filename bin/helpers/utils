@@ -5,7 +5,7 @@ import { PackageGenerator } from '../../src/Generator/PackageGenerator';
 
 export var utils = {
 
-  generateComponent(component, name, rootPath, rest = false) {
+  generateComponent(component, name, rootPath, rest = false, force = false) {
     var filesPath = _path.join(__dirname, '../files');
     var _package;
     var packageName;
@@ -32,7 +32,8 @@ export var utils = {
 
     packageGenerator = new PackageGenerator(_package, filesPath);
     packageGenerator.addRest = rest;
-    switch (component) {
+    packageGenerator.force = force;
+    switch (component.toLowerCase()) {
       case 'package':
         packageGenerator.create();
         break;
