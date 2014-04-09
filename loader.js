@@ -6,7 +6,7 @@ import { Package } from './src/Package/Package';
 import { Router } from './src/Router/Router';
 import { List } from './src/Util/List';
 import { Observable } from './src/MVC/Observable';
-import { InvalidParameterError } from './src/Error/InvalidParameterError';
+import { InvalidParamsError } from './src/Error/InvalidParamsError';
 import { FileExistsError } from './src/Error/FileExistsError';
 
 
@@ -31,5 +31,5 @@ export {List};
 export {Observable};
 
 // export common errors
-export {InvalidParameterError};
+export {InvalidParamsError};
 export {FileExistsError};

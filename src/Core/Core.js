@@ -2,13 +2,13 @@ var path = require('path');
 var _ = require('underscore');
 import { Config } from '../Config/Config';
 import { Server } from '../Server/Server';
-import { InvalidParameterError } from '../Error/InvalidParameterError';
+import { InvalidParamsError } from '../Error/InvalidParamsError';
 
 export class Core {
 
   constructor(rootPath, env = process.env.NODE_ENV || 'development') {
     if (!rootPath) {
-      throw new InvalidParameterError('[Core] Path is required!');
+      throw new InvalidParamsError('[Core] Path is required!');
     }
     this.path = rootPath;
     this.env = env;
@@ -26,7 +26,7 @@ export class Core {
     if (_.isFunction(callback)) {
       callback.call(this, this.server.app);
     } else {
-      throw new InvalidParameterError('rode.config first parameter should be a function');
+      throw new InvalidParamsError('rode.config first parameter should be a function');
     }
   }
 
