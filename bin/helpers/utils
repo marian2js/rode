@@ -1,13 +1,11 @@
 var _path = require('path');
-var mkdirp = require('mkdirp');
-var S = require('string');
 var fs = require('extfs');
 import { Package } from '../../src/Package/Package';
 import { PackageGenerator } from '../../src/Generator/PackageGenerator';
 
 export var utils = {
 
-  generateComponent(component, name, rootPath) {
+  generateComponent(component, name, rootPath, rest = false) {
     var filesPath = _path.join(__dirname, '../files');
     var _package;
     var packageName;
@@ -21,7 +19,7 @@ export var utils = {
       packageName = component.split(':')[0];
       component = component.split(':')[1];
     } else {
-      throw Error(`The component ${component} is not valid`);
+      this.exit(`The component ${component} is not valid`);
     }
 
     packagePath = _path.join(rootPath, 'src', packageName);
@@ -29,10 +27,11 @@ export var utils = {
 
     // If we are not generating a package, this should exist
     if (component.toLowerCase() !== 'package' && !_package.existsSync()) {
-      throw Error(`The package '${packageName}' does not exist`);
+      this.exit(`The package '${packageName}' does not exist`);
     }
 
     packageGenerator = new PackageGenerator(_package, filesPath);
+    packageGenerator.addRest = rest;
     switch (component) {
       case 'package':
         packageGenerator.create();

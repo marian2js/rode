@@ -1,0 +1,36 @@
+var expect = require('expect.js');
+import { RestController } from '../../Controller/RestController';
+
+describe('RestController', () => {
+  var restController;
+
+  beforeEach(() => restController = new RestController);
+
+  /**
+   * Test if RestController.get response correctly
+   */
+  it('should respond to GET "/api/{{ package | toLowerCase }}" with "[GET] /api/{{ package | toLowerCase }}"', done => {
+    var req = {};
+    var res = {
+      send: function (data) {
+        expect(data).to.be('[GET] /api/{{ package | toLowerCase }}');
+        done();
+      }
+    };
+    restController.get(req, res);
+  });
+
+  /**
+   * Test if RestController.post response correctly
+   */
+  it('should respond to POST "/api/{{ package | toLowerCase }}" with "[POST] /api/{{ package | toLowerCase }}"', done => {
+    var req = {};
+    var res = {
+      send: function (data) {
+        expect(data).to.be('[POST] /api/{{ package | toLowerCase }}');
+        done();
+      }
+    };
+    restController.post(req, res);
+  });
+});

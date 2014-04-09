@@ -1,3 +1,7 @@
+
+/**
+ * {{ controller | capitalize }} Controller
+ */
 export class {{ controller | capitalize }}Controller {
 
   /**

@@ -42,6 +42,22 @@ export class PackageGenerator {
     templateVars.controller = new PackageGenerator._templateVar(name);
     this._write(`Controller/${name}Controller.js`, PackageGenerator._renderTemplate(template, templateVars));
     this._write(`Tests/Controller/${name}ControllerTest.js`, PackageGenerator._renderTemplate(testTemplate, templateVars));
+
+    // if REST api is set create the RestController
+    if (this.addRest) {
+      this.createRestController();
+    }
+  }
+
+  /**
+   * Create a new REST controller
+   */
+  createRestController() {
+    var template = this._getTemplate('package/restcontroller');
+    var testTemplate = this._getTemplate('package/tests/restcontroller');
+    var templateVars = this._defaultTemplateVars;
+    this._write(`Controller/RestController.js`, PackageGenerator._renderTemplate(template, templateVars));
+    this._write(`Tests/Controller/RestControllerTest.js`, PackageGenerator._renderTemplate(testTemplate, templateVars));
   }
 
   /**
@@ -102,7 +118,7 @@ export class PackageGenerator {
    */
   get _defaultTemplateVars() {
     return {
-      package: this.package.name
+      package: new PackageGenerator._templateVar(this.package.name)
     }
   }
 
@@ -145,41 +161,34 @@ export class PackageGenerator {
   }
 
   /**
-   * Helper for extend strings in templates
+   * Helper for strings in templates, extends from string.js
    *
-   * @param {string} _str
+   * @param {string} value
    * @private
    */
-  static _templateVar(_str) {
-    var str = _str;
+  static _templateVar(value) {
+    this.setValue(value);
 
     /**
-     * Returns the string with the first letter in upper cases
+     * Returns the string with the first letter in upper case
      *
-     * @return {string}
+     * @return {PackageGenerator._templateVar}
      */
     this.capitalize = function () {
-      return str[0].toUpperCase() + str.slice(1);
+      return new PackageGenerator._templateVar(value[0].toUpperCase() + value.slice(1));
     };
 
     /**
-     * Returns the string with the first letter in lower cases
+     * Returns the string with the first letter in lower case
      *
-     * @return {string}
+     * @return {PackageGenerator._templateVar}
      */
     this.camelize = function () {
-      return str[0].toLowerCase() + str.slice(1);
+      return new PackageGenerator._templateVar(value[0].toLowerCase() + value.slice(1));
     };
-
-    /**
-     * Returns the string
-     *
-     * @return {string}
-     */
-    this.toString = function () {
-      return str;
-    };
-
-    return this;
   }
 }
+
+// _templateVar extends from string.js
+PackageGenerator._templateVar.prototype = S();
+PackageGenerator._templateVar.prototype.constructor = PackageGenerator._templateVar;

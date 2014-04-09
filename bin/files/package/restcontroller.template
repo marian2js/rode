@@ -1,0 +1,75 @@
+
+/**
+ * REST Controller
+ */
+export class RestController {
+
+  /**
+   * [GET] /api/{{ package | toLowerCase }}
+   */
+  get(req, res) {
+    res.send('[GET] /api/{{ package | toLowerCase }}');
+  }
+
+  /**
+   * [POST] /api/{{ package | toLowerCase }}
+   */
+  post(req, res) {
+    res.send('[POST] /api/{{ package | toLowerCase }}');
+  }
+
+  /**
+   * [GET] /api/{{ package | toLowerCase }}/sponsored
+   */
+  getSponsored(req, res) {
+    res.send('[GET] /api/{{ package | toLowerCase }}/sponsored');
+  }
+
+  /**
+   * [POST] /api/{{ package | toLowerCase }}/sponsored
+   */
+  postSponsored(req, res) {
+    res.send('[POST] /api/{{ package | toLowerCase }}/sponsored');
+  }
+
+  /**
+   * [PUT] /api/{{ package | toLowerCase }}/sponsored/today
+   */
+  putSponsoredToday(req, res) {
+    res.send('[PUT] /api/{{ package | toLowerCase }}/sponsored/today');
+  }
+
+  /**
+   * [GET] /api/{{ package | toLowerCase }}/:id
+   */
+  getById(req, res) {
+    var {{ package | camelize }}Id = req.params.id;
+    res.send('[GET] /api/{{ package | toLowerCase }}/' + {{ package | camelize }}Id);
+  }
+
+  /**
+   * [PUT] /api/{{ package | toLowerCase }}/:id
+   */
+  putById(req, res) {
+    var {{ package | camelize }}Id = req.params.id;
+    res.send('[PUT] /api/{{ package | toLowerCase }}/' + {{ package | camelize }}Id);
+  }
+
+  /**
+   * [GET] /api/{{ package | toLowerCase }}/:id/comments
+   */
+  getByIdComments(req, res) {
+    var {{ package | camelize }}Id = req.params.id;
+    res.send('[GET] /api/{{ package | toLowerCase }}/' + {{ package | camelize }}Id + '/comments');
+  }
+
+  /**
+   * [DELETE] /api/{{ package | toLowerCase }}/:id/comments/:id2
+   */
+  deleteByIdCommentsById(req, res) {
+    var {{ package | camelize }}Id = req.params.id,
+      commentId = req.params.id2;
+    res.send('[DELETE] /api/{{ package | toLowerCase }}/' + {{ package | camelize }}Id + '/comments/' + commentId);
+  }
+
+}

@@ -7,7 +7,7 @@ var utils = require('./helpers/utils').utils;
 commander._name = 'rode generate';
 commander
 	.usage('<component> <name>')
-	.option('-r, --rest', 'create a REST api for this package or controller')
+	.option('-r, --rest', 'create a REST api for the package or controller')
 	.option('-f, --force', 'force on existent package')
 	.parse(process.argv);
 
@@ -16,15 +16,12 @@ var path = utils.extractPath(commander.args) || '.';
 var rootPath = utils.findRootPath(path);
 var component = commander.args.shift();
 var names = commander.args;
+var rest = !!commander.rest;
 
 if (!names.length) {
   utils.exit('Error: The name for the new component is not defined');
 }
 
 for (var i = 0, len = names.length; i < len; i++) {
-  try {
-    utils.generateComponent(component.toLowerCase(), names[i], rootPath);
-  } catch (e) {
-    utils.exit(e);
-  }
+  utils.generateComponent(component, names[i], rootPath, rest);
 }

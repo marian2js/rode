@@ -68,6 +68,16 @@ describe('PackageGenerator', () => {
     });
 
     /**
+     * Test if the files of a new REST controller are created correctly
+     */
+    it('should generate a new REST controller', () => {
+      packageGenerator.createRestController();
+      expect(fs.existsSync(_package.path)).to.be(true);
+      expect(fs.existsSync(_package.getPath(`Controller/RestController.js`))).to.be(true);
+      expect(fs.existsSync(_package.getPath(`Tests/Controller/RestControllerTest.js`))).to.be(true);
+    });
+
+    /**
      * Test if the files of a new model are created correctly
      */
     it('should generate a new model', () => {
