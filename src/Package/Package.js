@@ -1,4 +1,5 @@
 var path = require('path');
+var fs = require('fs');
 
 export class Package {
 
@@ -52,5 +53,23 @@ export class Package {
       router.pack = this;
     } catch (e) { }
     return router;
+  }
+
+  /**
+   * Check if the package exists
+   *
+   * @return {Promise}
+   */
+  exists() {
+    return new Promise(resolve => fs.exists(this.path, resolve));
+  }
+
+  /**
+   * Check if the package exists synchronously
+   *
+   * @return {boolean}
+   */
+  existsSync() {
+    return fs.existsSync(this.path);
   }
 }

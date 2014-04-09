@@ -62,4 +62,40 @@ describe('Package', () => {
     });
   });
 
+  describe('exists', () => {
+    var pack2 = new Package('not exists', '/this_package_not_exists');
+
+    /**
+     * Test if exists works correctly
+     */
+    it('should check if a package exists', done => {
+      var count = 0;
+      var expected = 2;
+      var checkDone = function () {
+        if (++count === expected) {
+          done();
+        }
+      };
+      pack.exists()
+        .then(exists => {
+          expect(exists).to.be(true);
+          checkDone();
+        });
+      pack2.exists()
+        .then(exists => {
+          expect(exists).to.be(false);
+          checkDone();
+        });
+    });
+
+    /**
+     * Test if existsSync works correctly
+     */
+    it('should check if a package exists synchronously', () => {
+      expect(pack.existsSync()).to.be(true);
+      expect(pack2.existsSync()).to.be(false);
+    });
+
+  });
+
 });
