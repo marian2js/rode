@@ -34,7 +34,9 @@ describe('PackageGenerator', () => {
   });
 
   describe('Generate Components', () => {
-    var packagePath = path.join(__rodeBase, 'tmp/FakePackage');
+    var packageName = 'FakePackage';
+    var packagePath = path.join(__rodeBase, `tmp/${packageName}`);
+    var viewsPath = path.join(__rodeBase, 'tmp/views/');
     var filesPath = path.join(__rodeBase, 'bin/files');
     var _package;
     var packageGenerator;
@@ -43,8 +45,8 @@ describe('PackageGenerator', () => {
      * Creates a new Package and PackageGenerator
      */
     beforeEach(() => {
-      _package = new Package('FakePackage', packagePath);
-      packageGenerator = new PackageGenerator(_package, filesPath);
+      _package = new Package(packageName, packagePath);
+      packageGenerator = new PackageGenerator(_package, viewsPath, filesPath);
     });
 
     /**
@@ -53,6 +55,9 @@ describe('PackageGenerator', () => {
     afterEach(() => {
       if (fs.existsSync(packagePath)) {
         fs.removeSync(packagePath);
+      }
+      if (fs.existsSync(viewsPath)) {
+        fs.removeSync(viewsPath);
       }
     });
 
@@ -97,6 +102,54 @@ describe('PackageGenerator', () => {
     });
 
     /**
+     * Test if the jade views are created correctly
+     */
+    it('should generate the "jade" views', () => {
+      packageGenerator.createViews('jade');
+      expect(fs.existsSync(path.join(viewsPath, `${_package.name}/index.jade`))).to.be(true);
+    });
+
+    /**
+     * Test if the jade layout is created correctly
+     */
+    it('should generate the "jade" layout', () => {
+      packageGenerator.createViews('jade', true);
+      expect(fs.existsSync(path.join(viewsPath, `layout.jade`))).to.be(true);
+    });
+
+    /**
+     * Test if the ejs views are created correctly
+     */
+    it('should generate the "ejs" views', () => {
+      packageGenerator.createViews('ejs');
+      expect(fs.existsSync(path.join(viewsPath, `${_package.name}/index.ejs`))).to.be(true);
+    });
+
+    /**
+     * Test if the ejs layout is created correctly
+     */
+    it('should generate the "ejs" layout', () => {
+      packageGenerator.createViews('ejs', true);
+      expect(fs.existsSync(path.join(viewsPath, `layout.ejs`))).to.be(true);
+    });
+
+    /**
+     * Test if the hjs views are created correctly
+     */
+    it('should generate the "hjs" views', () => {
+      packageGenerator.createViews('hjs');
+      expect(fs.existsSync(path.join(viewsPath, `${_package.name}/index.hjs`))).to.be(true);
+    });
+
+    /**
+     * Test if the soy views are created correctly
+     */
+    it('should generate the "soy" views', () => {
+      packageGenerator.createViews('soy');
+      expect(fs.existsSync(path.join(viewsPath, `${_package.name}/index.soy`))).to.be(true);
+    });
+
+    /**
      * Test if the files of a new package are created correctly
      */
     it('should create a package files', () => {
@@ -107,6 +160,9 @@ describe('PackageGenerator', () => {
       expect(fs.existsSync(_package.getPath(`Tests/Controller/${_package.name}ControllerTest.js`))).to.be(true);
       expect(fs.existsSync(_package.getPath(`Tests/Model/${_package.name}Test.js`))).to.be(true);
       expect(fs.existsSync(_package.getPath(`routes.js`))).to.be(true);
+
+      // by default the views use "jade" as their view engine
+      expect(fs.existsSync(path.join(viewsPath, `${_package.name}/index.jade`))).to.be(true);
     });
 
   });

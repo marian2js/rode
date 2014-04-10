@@ -9,10 +9,12 @@ export class PackageGenerator {
 
   /**
    * @param {Package} _package
+   * @param {string} viewsPath
    * @param {string} filesPath
    */
-  constructor (_package, filesPath) {
+  constructor (_package, viewsPath, filesPath) {
     this.package = _package;
+    this.viewsPath = viewsPath;
     this.filesPath = filesPath;
   }
 
@@ -28,6 +30,7 @@ export class PackageGenerator {
     this.createController();
     this.createModel();
     this.createRoutes();
+    this.createViews(this.viewEngine, this.addLayout);
   }
 
   /**
@@ -105,6 +108,50 @@ export class PackageGenerator {
       throw new FileExistsError('"routes.js"');
     }
     this._write('routes.js', PackageGenerator._renderTemplate(template, templateVars));
+  }
+
+  /**
+   * Create the views for the package
+   *
+   * @param {string} [engine] (jade|ejs|hjs|soy)
+   * @param {boolean} [layout] if true, also create the layout
+   */
+  createViews(engine = 'jade', layout = false) {
+    var templateVars = this._defaultTemplateVars;
+    var viewsPath = path.join(this.viewsPath, this.package.name);
+    var templateIndex;
+    var templateLayout;
+
+    // Generate the files according the view engine
+    switch (engine) {
+      case 'jade':
+        templateIndex = PackageGenerator._renderTemplate(this._getTemplate('views/index.jade'), templateVars);
+        this._write(path.join(viewsPath, 'index.jade'), templateIndex);
+        if (layout) {
+          templateLayout = PackageGenerator._renderTemplate(this._getTemplate('views/layout.jade'), templateVars);
+          this._write(path.join(this.viewsPath, 'layout.jade'), templateLayout);
+        }
+        break;
+      case 'ejs':
+        templateIndex = PackageGenerator._renderTemplate(this._getTemplate('views/index.ejs'), templateVars);
+        this._write(path.join(viewsPath, 'index.ejs'), templateIndex);
+        if (layout) {
+          templateLayout = PackageGenerator._renderTemplate(this._getTemplate('views/layout.ejs'), templateVars);
+          this._write(path.join(this.viewsPath, 'layout.ejs'), templateLayout);
+        }
+        break;
+      case 'hjs':
+        // do not render vars in .hjs templates
+        templateIndex = this._getTemplate('views/index.hjs');
+        this._write(path.join(viewsPath, 'index.hjs'), templateIndex);
+        break;
+      case 'soy':
+        templateIndex = PackageGenerator._renderTemplate(this._getTemplate('views/index.soy'), templateVars);
+        this._write(path.join(viewsPath, 'index.soy'), templateIndex);
+        break;
+      default:
+        throw new Error(`View engine "${engine}" not yet supported.`);
+    }
   }
 
   /**

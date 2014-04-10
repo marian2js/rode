@@ -1,16 +1,27 @@
-var _path = require('path');
+var path = require('path');
 var fs = require('extfs');
 import { Package } from '../../src/Package/Package';
 import { PackageGenerator } from '../../src/Generator/PackageGenerator';
 
 export var utils = {
 
+  /**
+   * Generate components
+   *
+   * @param {string} component
+   * @param {string} name
+   * @param {string} rootPath
+   * @param {boolean} [rest]
+   * @param {boolean} [force]
+   */
   generateComponent(component, name, rootPath, rest = false, force = false) {
-    var filesPath = _path.join(__dirname, '../files');
+    var filesPath = path.join(__dirname, '../files');
+    var config = this.getConfig(rootPath);
     var _package;
     var packageName;
     var packagePath;
     var packageGenerator;
+    var viewsPath;
 
     // find the package name
     if (component.toLowerCase() === 'package') {
@@ -22,7 +33,7 @@ export var utils = {
       this.exit(`The component ${component} is not valid`);
     }
 
-    packagePath = _path.join(rootPath, 'src', packageName);
+    packagePath = path.join(rootPath, config.srcPath || 'src', packageName);
     _package = new Package(packageName, packagePath);
 
     // If we are not generating a package, this should exist
@@ -30,9 +41,13 @@ export var utils = {
       this.exit(`The package '${packageName}' does not exist`);
     }
 
-    packageGenerator = new PackageGenerator(_package, filesPath);
+    // Config package generator
+    viewsPath = path.join(rootPath, config.views ? config.views.path : 'views');
+    packageGenerator = new PackageGenerator(_package, viewsPath, filesPath);
+    packageGenerator.viewEngine = config.views ? config.views.engine : '';
     packageGenerator.addRest = rest;
     packageGenerator.force = force;
+
     switch (component.toLowerCase()) {
       case 'package':
         packageGenerator.create();
@@ -70,20 +85,17 @@ export var utils = {
   /**
    * Find root path for app
    *
-   * @param [path]
+   * @param {string} [currentPath]
    * @returns {string} path
    */
-  findRootPath(path) {
-    if (!path) {
-      path = __dirname;
-    }
+  findRootPath(currentPath = __dirname) {
     var err = false;
-    while (path !== '/') {
-      path = _path.resolve(path);
-      if (this.isRootPath(path)) {
-        return path;
+    while (currentPath !== '/') {
+      currentPath = path.resolve(currentPath);
+      if (this.isRootPath(currentPath)) {
+        return currentPath;
       }
-      path = _path.join(path, '../');
+      currentPath = path.join(currentPath, '../');
     }
     return null;
   },
@@ -91,23 +103,38 @@ export var utils = {
   /**
    * Check if path is the root path of the app
    *
-   * @param path
+   * @param {string} currentPath
    * @returns {boolean}
    */
-  isRootPath(path) {
-    var files = fs.readdirSync(path);
+  isRootPath(currentPath) {
+    var files = fs.readdirSync(currentPath);
     return files.indexOf('package.json') !== -1 && files.indexOf('config') !== -1;
+  },
+
+  /**
+   * Get the config options from config.json
+   *
+   * @param {string} rootPath
+   */
+  getConfig(rootPath) {
+    var configPath = path.join(rootPath, 'config/config.json');
+    return require(configPath);
   },
 
   /**
    * Set error when no installation is detected
    *
-   * @param path
+   * @param {string} currentPath
    */
-  errorNotRode(path) {
-    this.exit(`Can not find a rode.js installation in ${_path.resolve(path)}`);
+  errorNotRode(currentPath) {
+    this.exit(`Can not find a rode.js installation in ${path.resolve(currentPath)}`);
   },
 
+  /**
+   * Finish the process
+   *
+   * @param [error] if is defined, shows the error
+   */
   exit(error) {
     if (error) {
       console.error(`  \x1b[31m${error}\x1b[0m`);
