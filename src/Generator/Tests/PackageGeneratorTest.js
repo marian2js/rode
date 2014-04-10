@@ -7,32 +7,6 @@ import { Router } from '../../Router/Router';
 
 describe('PackageGenerator', () => {
 
-  describe('Render Template', () => {
-
-    /**
-     * Test if the template system works correctly
-     */
-    it('should render the variables inside a template', () => {
-      var template = 'Hello {{ name }}! This is a {{ thing | toLowerCase }}.';
-      var vars = {
-        name: 'World',
-        thing: 'TEST'
-      };
-      template = PackageGenerator._renderTemplate(template, vars);
-      expect(template).to.be('Hello World! This is a test.');
-    });
-
-    /**
-     * Test if the template does not render undefined variables
-     */
-    it('should not render something if the variable does not exist', () => {
-      var template = 'This {{ variable }} does not exist';
-      template = PackageGenerator._renderTemplate(template, {});
-      expect(template).to.be('This  does not exist');
-    });
-
-  });
-
   describe('Generate Components', () => {
     var packageName = 'FakePackage';
     var packagePath = path.join(__rodeBase, `tmp/${packageName}`);

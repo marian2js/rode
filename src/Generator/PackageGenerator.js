@@ -1,9 +1,11 @@
 var path = require('path');
 var mkdirp = require('mkdirp');
 var fs = require('fs');
+var os = require('os');
 var S = require('string');
 import { Package } from '../Package/Package';
 import { FileExistsError } from '../Error/FileExistsError';
+import { Template } from '../Util/Template';
 
 export class PackageGenerator {
 
@@ -40,8 +42,8 @@ export class PackageGenerator {
    * @throws FileExistsError
    */
   createController(name = this.package.name) {
-    var template = this._getTemplate('package/controller');
-    var testTemplate = this._getTemplate('package/tests/controller');
+    var template = new Template(this._getTemplate('package/controller'));
+    var testTemplate = new Template(this._getTemplate('package/tests/controller'));
     var templateVars = this._defaultTemplateVars;
 
     // avoid *ControllerController in the name of the controller
@@ -52,9 +54,15 @@ export class PackageGenerator {
     if (!this.force && this.package.existsSync(`Controller/${name}Controller.js`)) {
       throw new FileExistsError(`Controller "${name}"`);
     }
-    templateVars.controller = new PackageGenerator._templateVar(name);
-    this._write(`Controller/${name}Controller.js`, PackageGenerator._renderTemplate(template, templateVars));
-    this._write(`Tests/Controller/${name}ControllerTest.js`, PackageGenerator._renderTemplate(testTemplate, templateVars));
+    templateVars.controller = new Template.ExtendString(name);
+
+    // soy's view engine needs a template on controller action
+    if (this.viewEngine === 'soy') {
+      templateVars.templateAction = `template: 'index',${os.EOL}      `;
+    }
+
+    this._write(`Controller/${name}Controller.js`, template.render(templateVars));
+    this._write(`Tests/Controller/${name}ControllerTest.js`, testTemplate.render(templateVars));
 
     // if REST api is set create the RestController
     if (this.addRest) {
@@ -68,14 +76,14 @@ export class PackageGenerator {
    * @throws FileExistsError
    */
   createRestController() {
-    var template = this._getTemplate('package/restcontroller');
-    var testTemplate = this._getTemplate('package/tests/restcontroller');
+    var template = new Template(this._getTemplate('package/restcontroller'));
+    var testTemplate = new Template(this._getTemplate('package/tests/restcontroller'));
     var templateVars = this._defaultTemplateVars;
     if (!this.force && this.package.existsSync('Controller/RestController.js')) {
       throw new FileExistsError('Controller "RestController"');
     }
-    this._write(`Controller/RestController.js`, PackageGenerator._renderTemplate(template, templateVars));
-    this._write(`Tests/Controller/RestControllerTest.js`, PackageGenerator._renderTemplate(testTemplate, templateVars));
+    this._write(`Controller/RestController.js`, template.render(templateVars));
+    this._write(`Tests/Controller/RestControllerTest.js`, testTemplate.render(templateVars));
   }
 
   /**
@@ -85,15 +93,15 @@ export class PackageGenerator {
    * @throws FileExistsError
    */
   createModel(name = this.package.name) {
-    var template = this._getTemplate('package/model');
-    var testTemplate = this._getTemplate('package/tests/model');
+    var template = new Template(this._getTemplate('package/model'));
+    var testTemplate = new Template(this._getTemplate('package/tests/model'));
     var templateVars = this._defaultTemplateVars;
     if (!this.force && this.package.existsSync(`Model/${name}.js`)) {
       throw new FileExistsError(`Model "${name}"`);
     }
-    templateVars.model = new PackageGenerator._templateVar(name);
-    this._write(`Model/${name}.js`, PackageGenerator._renderTemplate(template, templateVars));
-    this._write(`Tests/Model/${name}Test.js`, PackageGenerator._renderTemplate(testTemplate, templateVars));
+    templateVars.model = new Template.ExtendString(name);
+    this._write(`Model/${name}.js`, template.render(templateVars));
+    this._write(`Tests/Model/${name}Test.js`, testTemplate.render(templateVars));
   }
 
   /**
@@ -102,12 +110,12 @@ export class PackageGenerator {
    * @throws FileExistsError
    */
   createRoutes() {
-    var template = this._getTemplate('package/routes');
+    var template = new Template(this._getTemplate('package/routes'));
     var templateVars = this._defaultTemplateVars;
     if (!this.force && this.package.existsSync('routes.js')) {
       throw new FileExistsError('"routes.js"');
     }
-    this._write('routes.js', PackageGenerator._renderTemplate(template, templateVars));
+    this._write('routes.js', template.render(templateVars));
   }
 
   /**
@@ -125,19 +133,19 @@ export class PackageGenerator {
     // Generate the files according the view engine
     switch (engine) {
       case 'jade':
-        templateIndex = PackageGenerator._renderTemplate(this._getTemplate('views/index.jade'), templateVars);
-        this._write(path.join(viewsPath, 'index.jade'), templateIndex);
+        templateIndex = new Template(this._getTemplate('views/index.jade'));
+        this._write(path.join(viewsPath, 'index.jade'), templateIndex.render(templateVars));
         if (layout) {
-          templateLayout = PackageGenerator._renderTemplate(this._getTemplate('views/layout.jade'), templateVars);
-          this._write(path.join(this.viewsPath, 'layout.jade'), templateLayout);
+          templateLayout = new Template(this._getTemplate('views/layout.jade'));
+          this._write(path.join(this.viewsPath, 'layout.jade'), templateLayout.render(templateVars));
         }
         break;
       case 'ejs':
-        templateIndex = PackageGenerator._renderTemplate(this._getTemplate('views/index.ejs'), templateVars);
-        this._write(path.join(viewsPath, 'index.ejs'), templateIndex);
+        templateIndex = new Template(this._getTemplate('views/index.ejs'));
+        this._write(path.join(viewsPath, 'index.ejs'), templateIndex.render(templateVars));
         if (layout) {
-          templateLayout = PackageGenerator._renderTemplate(this._getTemplate('views/layout.ejs'), templateVars);
-          this._write(path.join(this.viewsPath, 'layout.ejs'), templateLayout);
+          templateLayout = new Template(this._getTemplate('views/layout.ejs'));
+          this._write(path.join(this.viewsPath, 'layout.ejs'), templateLayout.render(templateVars));
         }
         break;
       case 'hjs':
@@ -146,8 +154,8 @@ export class PackageGenerator {
         this._write(path.join(viewsPath, 'index.hjs'), templateIndex);
         break;
       case 'soy':
-        templateIndex = PackageGenerator._renderTemplate(this._getTemplate('views/index.soy'), templateVars);
-        this._write(path.join(viewsPath, 'index.soy'), templateIndex);
+        templateIndex = new Template(this._getTemplate('views/index.soy'));
+        this._write(path.join(viewsPath, 'index.soy'), templateIndex.render(templateVars));
         break;
       default:
         throw new Error(`View engine "${engine}" not yet supported.`);
@@ -189,7 +197,7 @@ export class PackageGenerator {
    */
   get _defaultTemplateVars() {
     return {
-      package: new PackageGenerator._templateVar(this.package.name)
+      package: new Template.ExtendString(this.package.name)
     }
   }
 
@@ -205,61 +213,4 @@ export class PackageGenerator {
       .toString();
   }
 
-  /**
-   * Render the variables between double curly braces
-   *
-   * i.e: {{ name }} -> vars['name']
-   *      {{ name | toLowerCase }} -> vars['name'].toLowerCase()
-   *
-   * @param {string} template
-   * @param vars
-   * @returns {string}
-   * @private
-   */
-  static _renderTemplate(template, vars) {
-    var regex = /\{{2}([^}]+)\}{2}/g;
-    template = template.replace(regex, (match, value) => {
-      var parts = value.split('|');
-      var result;
-      value = parts[0].trim();
-      result = vars[value] || '';
-      if (parts[1] && parts[1].trim()) {
-        result = result[parts[1].trim()]();
-      }
-      return result;
-    });
-    return template;
-  }
-
-  /**
-   * Helper for strings in templates, extends from string.js
-   *
-   * @param {string} value
-   * @private
-   */
-  static _templateVar(value) {
-    this.setValue(value);
-
-    /**
-     * Returns the string with the first letter in upper case
-     *
-     * @return {PackageGenerator._templateVar}
-     */
-    this.capitalize = function () {
-      return new PackageGenerator._templateVar(value[0].toUpperCase() + value.slice(1));
-    };
-
-    /**
-     * Returns the string with the first letter in lower case
-     *
-     * @return {PackageGenerator._templateVar}
-     */
-    this.camelize = function () {
-      return new PackageGenerator._templateVar(value[0].toLowerCase() + value.slice(1));
-    };
-  }
 }
-
-// _templateVar extends from string.js
-PackageGenerator._templateVar.prototype = S();
-PackageGenerator._templateVar.prototype.constructor = PackageGenerator._templateVar;
