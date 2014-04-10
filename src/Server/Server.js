@@ -3,6 +3,7 @@ var http = require('http');
 var url = require('url');
 var express = require('express');
 var _ = require('underscore');
+import { ViewEngine } from '../MVC/ViewEngine';
 
 export class Server {
 
@@ -101,6 +102,17 @@ export class Server {
     if (config.has('bodyParser')) {
       this.app.use(this.express.bodyParser());
     }
+  }
+
+  /**
+   * Config the view engine
+   *
+   * @return {Promise}
+   */
+  configViews(views) {
+    var viewEngine = ViewEngine.createInstance(this.app, views);
+    viewEngine.config();
+    return viewEngine.compile();
   }
 
   /**

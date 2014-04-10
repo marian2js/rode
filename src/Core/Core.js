@@ -33,15 +33,14 @@ export class Core {
   /**
    * Run the app
    *
-   * @returns {Promise}
+   * @return {Promise}
    */
   run() {
     return this.packageList.getAll()
-        .then(packs => {
-          this.server.createRoutes(packs);
-          this.server.config(this);
-          return this.server.run();
-        });
+        .then(packs => this.server.createRoutes(packs))
+        .then(() => this.server.config(this))
+        .then(() => this.server.configViews(this.options.get('views')))
+        .then(() => this.server.run());
   }
 
   /**
