@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require('extfs');
 import { Package } from '../../src/Package/Package';
 import { PackageGenerator } from '../../src/Generator/PackageGenerator';
+import { ProjectGenerator } from '../../src/Generator/ProjectGenerator';
 
 export var utils = {
 
@@ -64,6 +65,26 @@ export var utils = {
       default:
         this.exit(`The component ${component} is not valid`);
     }
+  },
+
+  /**
+   * Generate a new project
+   *
+   * @param {string} projectPath
+   * @param {string} viewEngine
+   * @param {string} cssTemplate
+   * @param {boolean} sessions
+   */
+  generateProject(projectPath, viewEngine, cssTemplate, sessions = false) {
+    var filesPath = path.join(__dirname, '../files');
+    var packageJson = require('../../package.json');
+    var version = packageJson.version.split('.');
+    var acceptedVersion = version[0] + '.' + version[1] + '.x';
+    var projectGenerator = new ProjectGenerator(projectPath, filesPath, acceptedVersion);
+    projectGenerator.viewEngine = viewEngine;
+    projectGenerator.cssTemplate = cssTemplate;
+    projectGenerator.sessions = sessions;
+    projectGenerator.create();
   },
 
   /**
