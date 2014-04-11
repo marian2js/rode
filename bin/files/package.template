@@ -1,0 +1,25 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "dependencies": {
+    "rode": "{{ acceptedVersion }}",
+    "underscore": "1.x.x",
+    "{{ css }}": "*",
+    "traceur": "0.0.31",
+    "es6-shim": "^0.10.1",
+    "es6-module-loader": "^0.5.3",
+    "prfun": "^0.1.0"
+  },
+  "devDependencies": {
+    "expect.js": "0.3.x",
+    "grunt-mocha-test": "0.x.x",
+    "grunt": "0.x.x"
+  },
+  "main": "app",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  }
+}
