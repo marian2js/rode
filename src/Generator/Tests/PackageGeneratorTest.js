@@ -3,7 +3,6 @@ var path = require('path');
 var fs = require('extfs');
 import { PackageGenerator } from '../PackageGenerator';
 import { Package } from '../../Package/Package';
-import { Router } from '../../Router/Router';
 
 describe('PackageGenerator', () => {
 
