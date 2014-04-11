@@ -2,7 +2,6 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var fs = require('fs');
 var os = require('os');
-var S = require('string');
 import { Package } from '../Package/Package';
 import { FileExistsError } from '../Error/FileExistsError';
 import { Template } from '../Util/Template';
@@ -115,6 +114,7 @@ export class PackageGenerator {
     if (!this.force && this.package.existsSync('routes.js')) {
       throw new FileExistsError('"routes.js"');
     }
+    templateVars.restApi = `${os.EOL}router.restApi = '/api/${this.package.name.toLowerCase()}';`;
     this._write('routes.js', template.render(templateVars));
   }
 

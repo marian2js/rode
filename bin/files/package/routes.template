@@ -1,6 +1,6 @@
 import { Router } from 'rode/loader';
 
-var router = new Router();
+var router = new Router();{{ restApi }}
 router.base = '/';
 
 /**
