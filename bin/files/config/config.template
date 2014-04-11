@@ -11,7 +11,5 @@
   "views": {
     "path": "views",
     "engine": "{{ viewEngine | toLowerCase }}"
-  },
-  "bodyParser": true,
-  "useErrorHandler": false
+  }
 }

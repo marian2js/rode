@@ -31,12 +31,6 @@ describe('Server', () => {
      * @param {Router} router
      */
     var testExpressRoutes = function (router) {
-      var expressRoutes = new List;
-      for (var method in server.app.routes) {
-        if (server.app.routes.hasOwnProperty(method)) {
-          expressRoutes.add(server.app.routes[method]);
-        }
-      }
       router.forEach(route => {
         var routePath;
         var exists;
@@ -45,7 +39,12 @@ describe('Server', () => {
         } else {
           routePath = path.join(router.base, route.pattern);
         }
-        exists = expressRoutes.some(eRoute => eRoute.path === routePath);
+        exists = server.app._router.stack.some(stack => {
+          if (!stack || !stack.route) {
+            return false;
+          }
+          return stack.route.methods[route.method] && routePath === stack.route.path;
+        });
         expect(exists).to.be(true);
       });
     };

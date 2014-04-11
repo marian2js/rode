@@ -92,16 +92,6 @@ export class Server {
 
     // Config Statics
     this.app.use(this.express.static(core.getPath('statics')));
-
-    // Config Error Handler
-    if (config.has('errorHandler')) {
-      this.app.use(this.express.errorHandler());
-    }
-
-    // Config BodyParser
-    if (config.has('bodyParser')) {
-      this.app.use(this.express.bodyParser());
-    }
   }
 
   /**

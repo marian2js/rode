@@ -4,7 +4,7 @@
   "version": "0.3.0",
   "author": "Mariano Pardo (Codexar)",
   "dependencies": {
-    "express": "3.x.x",
+    "express": "4.x.x",
     "underscore": "1.x.x",
     "extfs": "0.x.x",
     "jade": "1.x.x",
