@@ -5,10 +5,10 @@
     "rode": "{{ acceptedVersion }}",
     "underscore": "1.x.x",
     "{{ css }}": "*",
-    "traceur": "0.0.31",
-    "es6-shim": "^0.10.1",
-    "es6-module-loader": "^0.5.3",
-    "prfun": "^0.1.0"
+    "traceur": "0.0.32",
+    "es6-shim": "0.10.x",
+    "es6-module-loader": "0.5.x",
+    "prfun": "0.1.x"
   },
   "devDependencies": {
     "expect.js": "0.3.x",
