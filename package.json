@@ -1,14 +1,11 @@
 {
   "name": "rode",
   "description": "Packet-Oriented Framework for ES6 and Express.",
-  "version": "0.3.0-alpha",
+  "version": "0.3.0-beta",
   "author": "Mariano Pardo (Codexar)",
   "dependencies": {
-    "express": ">= 3 < 4",
-    "underscore": ">= 1.4 < 2",
-    "mongoose": ">= 3.8 < 4",
-    "mongoose-schema-extend": "latest",
-    "nodecache": "latest",
+    "express": "3.x.x",
+    "underscore": "1.x.x",
     "extfs": "latest",
     "jade": "~0.30.0",
     "stylus": "~0.40.0",
