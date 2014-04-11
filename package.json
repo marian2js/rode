@@ -1,7 +1,7 @@
 {
   "name": "rode",
   "description": "Packet-Oriented Framework for ES6 and Express.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Mariano Pardo (Codexar)",
   "dependencies": {
     "express": "4.x.x",
@@ -35,7 +35,7 @@
   "bin": {
     "rode": "./bin/rode",
     "rode-generate": "./bin/rode-generate",
-    "rode-new-package": "./bin/rode-new"
+    "rode-new": "./bin/rode-new"
   },
   "keywords": [
     "framework",
