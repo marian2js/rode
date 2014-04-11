@@ -114,7 +114,9 @@ export class PackageGenerator {
     if (!this.force && this.package.existsSync('routes.js')) {
       throw new FileExistsError('"routes.js"');
     }
-    templateVars.restApi = `${os.EOL}router.restApi = '/api/${this.package.name.toLowerCase()}';`;
+    if (this.addRest) {
+      templateVars.restApi = `${os.EOL}router.restApi = '/api/${this.package.name.toLowerCase()}';`;
+    }
     this._write('routes.js', template.render(templateVars));
   }
 
