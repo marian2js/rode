@@ -21,6 +21,7 @@ Packet-Oriented Framework for [ES6](http://wiki.ecmascript.org/doku.php?id=harmo
 
 rode.js framework is a stable way to use [ES6](http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts) today.
 [ES6](http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts) support is provided by [traceur](https://npmjs.org/package/traceur), [es6-shim](https://npmjs.org/package/es6-shim) and [es6-module-loader](https://npmjs.org/package/es6-module-loader).
+
 rode.js is based on [Express](http://expressjs.com), but we not rewrite it, you can still using all the [features of Express](http://expressjs.com/3x/api.html).
 
 
@@ -163,11 +164,12 @@ export class UserController {
 ## <a name="restful-apis"></a>Restful APIs
 
 Make a Restful API can not be more easy.
-Create your package with the command:
+
+Create your REST package with the command:
 
     $ rode generate package PackageName --rest
 
-Or add `router.restApi = '/api/products';` on `routes.js`
+Or add `router.restApi = '/api/products';` on the `routes.js` of any package.
 
 Now you should create methods on your `RestController.js` following simple naming conventions.
 
@@ -225,3 +227,8 @@ rode.js supports all this templates engines:
 You can run the test with the command:
 
     $ grunt test
+
+
+## License
+
+[MIT](https://github.com/codexar/rode/blob/master/LICENSE)
