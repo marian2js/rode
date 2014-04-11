@@ -7,10 +7,10 @@
     "js": "js",
     "css": "css"
   },
-  "css": "less",
+  "css": "{{ cssTemplate | toLowerCase }}",
   "views": {
     "path": "views",
-    "engine": "ejs"
+    "engine": "{{ viewEngine | toLowerCase }}"
   },
   "bodyParser": true,
   "useErrorHandler": false
