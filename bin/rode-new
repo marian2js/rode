@@ -5,6 +5,7 @@ var commander = require('commander');
 var fs = require('extfs');
 var rode = require('../index');
 var utils = require('./helpers/utils').utils;
+var relativePath;
 var projectPath;
 
 // CLI
@@ -16,17 +17,19 @@ commander
 	.option('-c, --css <engine>', 'add stylesheet <engine> support (less|stylus) (defaults to plain css)')
 	.parse(process.argv);
 
-projectPath = commander.args.shift() || '.';
-projectPath = path.resolve(projectPath);
+relativePath = commander.args.shift() || '.';
+projectPath = path.resolve(relativePath);
 
 fs.isEmpty(projectPath, function (empty) {
   if (empty) {
     utils.generateProject(projectPath, commander.view, commander.css, commander.sessions);
+    writeInstructions();
   } else {
     commander.confirm('Destination is not empty, continue? (yes/no) ', function (ok) {
       if (ok) {
         process.stdin.destroy();
         utils.generateProject(projectPath, commander.view, commander.css, commander.sessions);
+        writeInstructions();
       } else {
         console.log('Bye!');
         utils.exit();
@@ -34,3 +37,13 @@ fs.isEmpty(projectPath, function (empty) {
     });
   }
 });
+
+function writeInstructions () {
+  console.log();
+  console.log('    Install the dependencies:');
+  console.log('      cd ' + relativePath + ' && npm install');
+  console.log();
+  console.log('    Run the app:');
+  console.log('      node app');
+  console.log();
+};
