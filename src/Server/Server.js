@@ -94,14 +94,13 @@ export class Server {
     this.app.use(this.express.static(core.getPath('statics')));
 
     // Config database
-    return new Promise(resolve => {
-      if (config.has('mongo') && config.get('mongo').uri) {
-        core.db = new (require('../DB/Mongo').Mongo)(config.get('mongo').uri, config.get('mongo').options);
-        return core.db.connect();
-      } else {
-        resolve();
-      }
-    });
+    if (config.has('mongo') && config.get('mongo').uri) {
+      core.db = new (require('../DB/Mongo').Mongo)(config.get('mongo').uri, config.get('mongo').options);
+      return core.db.connect();
+    }
+
+    // Ensure that the response is a promise
+    return new Promise(resolve => resolve());
   }
 
   /**
