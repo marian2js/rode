@@ -1,4 +1,5 @@
 var traceur = require('traceur');
+require('rode');
 
 /*********************************************
  * WARNING: This is file does not support ES6
