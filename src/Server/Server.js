@@ -94,10 +94,14 @@ export class Server {
     this.app.use(this.express.static(core.getPath('statics')));
 
     // Config database
-    if (config.has('mongo') && config.get('mongo').uri) {
-      core.db = new (require('../DB/Mongo').Mongo)(config.get('mongo').uri, config.get('mongo').options);
-      return core.db.connect();
-    }
+    return new Promise(resolve => {
+      if (config.has('mongo') && config.get('mongo').uri) {
+        core.db = new (require('../DB/Mongo').Mongo)(config.get('mongo').uri, config.get('mongo').options);
+        return core.db.connect();
+      } else {
+        resolve();
+      }
+    });
   }
 
   /**
@@ -165,7 +169,7 @@ export class Server {
         You need to implement the method '${route.action}' on '${controller.name}'`);
       }
 
-      this.app[route.method.toLowerCase()](pattern || '/', call);
+      this.app[route.method](pattern || '/', call);
     });
   }
 }

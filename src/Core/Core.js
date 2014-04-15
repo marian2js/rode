@@ -36,11 +36,11 @@ export class Core {
    * @return {Promise}
    */
   run() {
-    return this.packageList.getAll()
-        .then(packs => this.server.createRoutes(packs))
-        .then(() => this.server.config(this))
-        .then(() => this.server.configViews(this.options.get('views')))
-        .then(() => this.server.run());
+    return this.server.config(this)
+      .then(() => this.packageList.getAll())
+      .then(packs => this.server.createRoutes(packs))
+      .then(() => this.server.configViews(this.options.get('views')))
+      .then(() => this.server.run());
   }
 
   /**
@@ -55,7 +55,7 @@ export class Core {
   /**
    * Returns the path of a resource
    *
-   * @param {string} name
+   * @param {string} [name]
    * @return {string}
    */
   getPath(name) {
