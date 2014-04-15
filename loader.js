@@ -24,6 +24,7 @@ core.packageList = new PackageList;
 // for singletons export the instance
 export var rode = core;
 export var packageList = core.packageList;
+export var db = core.db;
 
 // export all the public classes
 export {Package};
