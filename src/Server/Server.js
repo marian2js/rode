@@ -92,6 +92,12 @@ export class Server {
 
     // Config Statics
     this.app.use(this.express.static(core.getPath('statics')));
+
+    // Config database
+    if (config.has('mongo') && config.get('mongo').uri) {
+      core.db = new (require('../DB/Mongo').Mongo)(config.get('mongo').uri, config.get('mongo').options);
+      return core.db.connect();
+    }
   }
 
   /**
