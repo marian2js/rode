@@ -156,7 +156,7 @@ export class Server {
       if (Array.isArray(call)) {
         var middlewares = call;
         call = middlewares.pop();
-        this.app[route.method](pattern || '/', ...middlewares);
+        this.app[route.method.toLowerCase()](pattern || '/', ...middlewares);
       }
 
       // Send the route to express
@@ -165,7 +165,7 @@ export class Server {
         You need to implement the method '${route.action}' on '${controller.name}'`);
       }
 
-      this.app[route.method](pattern || '/', call);
+      this.app[route.method.toLowerCase()](pattern || '/', call);
     });
   }
 }
