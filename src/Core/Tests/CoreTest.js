@@ -94,6 +94,11 @@ describe('Core', () => {
       expect(cssPath).to.be(path.join(fakePath, 'public/css'));
     });
 
+    it('should return node_modules path', () => {
+      var rootPath = core.getPath('node_modules');
+      expect(rootPath).to.be(path.join(fakePath, 'node_modules'));
+    });
+
     it('should return root path', () => {
       var rootPath = core.getPath('root');
       expect(rootPath).to.be(fakePath);

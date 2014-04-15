@@ -53,7 +53,7 @@ export class Core {
   }
 
   /**
-   * Get path for a resource
+   * Returns the path of a resource
    *
    * @param {string} name
    * @return {string}
@@ -82,13 +82,16 @@ export class Core {
         return path.join(this.path, statics.path);
 
       case 'images':
-        return path.join(this.path, path.join(statics.path, statics.images));
+        return path.join(this.path, statics.path, statics.images);
 
       case 'js': case 'javascript':
-        return path.join(this.path, path.join(statics.path, statics.js));
+        return path.join(this.path, statics.path, statics.js);
 
       case 'css': case 'stylesheets':
-        return path.join(this.path, path.join(statics.path, statics.css));
+        return path.join(this.path, statics.path, statics.css);
+
+      case 'node_modules':
+        return path.join(this.path, 'node_modules');
 
       default:
         return this.path;
