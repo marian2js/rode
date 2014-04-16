@@ -12,7 +12,7 @@ describe('{{ controller | capitalize }}Controller', () => {
   it('should render a view with the title "Index of {{ package }}"', done => {
     var req = {};
     var res = {
-      render: function (view, data) {
+      render(view, data) {
         expect(view).to.be('{{ package }}/index');
         expect(data).to.be.an(Object);
         expect(data.title).to.be('Index of {{ package }}');
