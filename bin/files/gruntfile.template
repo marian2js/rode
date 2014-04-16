@@ -2,37 +2,44 @@ require('./setup');
 
 module.exports = function(grunt) {
 
-	grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-mocha-test');
 
-	// Project configuration.
-	grunt.initConfig({
-		// Configure a mochaTest task
-		mochaTest: {
-			test: {
-				options: {
-					reporter: 'spec'
-				},
-				src: [
-				  'src/**/Tests/**/*.js'
-				]
-			}
-		}
-	});
+  // Project configuration.
+  grunt.initConfig({
+    // Configure a mochaTest task
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: [
+          'src/**/Tests/**/*.js'
+        ]
+      }
+    }
+  });
 
-	// Run tests //
-	grunt.registerTask('test', [
-		'mochaTest'
-	]);
+  // Configure tests //
+  grunt.registerTask('startTestEnvironment', 'Test Environment', function() {
+    process.env.NODE_ENV = 'test';
+    require('rode');
+  });
 
-	// Build tasks //
-	grunt.registerTask('build', [
+  // Run tests //
+  grunt.registerTask('test', [
+    'startTestEnvironment',
+    'mochaTest'
+  ]);
 
-	]);
+  // Build tasks //
+  grunt.registerTask('build', [
 
-	// Default tasks //
-	grunt.registerTask('default', [
-		'test',
-		'build'
-	]);
+  ]);
+
+  // Default tasks //
+  grunt.registerTask('default', [
+    'test',
+    'build'
+  ]);
 
 };
