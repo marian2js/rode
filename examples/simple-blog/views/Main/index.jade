@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+  h1= title
+  div.container
+
+    each post in posts
+      div.panel.panel-default
+        div.panel-heading #{post.title}
+        div.panel-body
+          p #{post.body}
+        div.panel-footer #{post.tags}
+
+    ul.pagination
+      li(class=currentPage > 1 ? '' : 'disabled')
+        a(href='?page=' + (currentPage - 1)) &laquo;
+      - for (var i = 1; i <= pages; i++) {
+        li(class=currentPage == i ? 'active' : '')
+          a(href='?page=' + i) #{i}
+      - }
+      li(class=currentPage < pages ? '' : 'disabled')
+        a(href='?page=' + (++currentPage)) &raquo;

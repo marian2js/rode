@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/vendor/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+  body
+    header
+      nav
+        a(class='btn btn-primary', href='/') Home
+        | .
+        a(class='btn btn-primary', href='/post/add') Add Post
+    block content

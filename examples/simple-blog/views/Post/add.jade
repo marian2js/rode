@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  header
+    h1= title
+  div.container
+    form.col-lg-6(method='POST')
+      div.form-group
+        label(for='title') Title
+        input.form-control#title(name='title', placeholder='Inser Title', required)
+      div.form-group
+        label(for='body') Body
+        textarea.form-control#body(name='body', placeholder='Insert Body', required)
+      div.form-group
+        label(for='tabs') Tags (separated with commas)
+        input.form-control#tags(name='tags', placeholder='Insert tags')
+      button(class='btn btn-primary', type='submit') Submit

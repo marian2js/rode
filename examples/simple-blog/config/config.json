@@ -1,0 +1,18 @@
+{
+  "baseUri": "http://localhost",
+  "srcPath": "src",
+  "statics": {
+    "path": "public",
+    "images": "images",
+    "js": "js",
+    "css": "css"
+  },
+  "css": "css",
+  "views": {
+    "path": "views",
+    "engine": "jade"
+  },
+  "mongo": {
+    "uri": "mongodb://localhost/example_simple_blog"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "simple-blog",
+  "version": "0.0.1",
+  "dependencies": {
+    "body-parser": "^1.0.2",
+    "css": "*",
+    "es6-module-loader": "0.5.x",
+    "es6-shim": "0.10.x",
+    "mongoose": "^3.8.8",
+    "prfun": "0.1.x",
+    "rode": "0.3.x",
+    "traceur": "0.0.32",
+    "underscore": "1.x.x"
+  },
+  "devDependencies": {
+    "expect.js": "0.3.x",
+    "grunt": "0.x.x",
+    "grunt-mocha-test": "0.x.x",
+    "sinon": "^1.9.1"
+  },
+  "main": "app",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  }
+}

@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+  h1= post.title
+  div.container
+    div(class='panel panel-default')
+      div.panel-body
+        p #{post.body}
+      div.panel-footer #{post.tags}
