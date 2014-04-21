@@ -44,7 +44,7 @@ export class Mongo extends AbstractDB {
   _linkMongoose() {
     var mongoosePath = path.join(__rodeBase, 'node_modules', 'mongoose');
     var appMongoosePath = path.join(Core.instance.getPath('node_modules'), 'mongoose');
-    if (fs.existsSync(appMongoosePath)) {
+    if (fs.existsSync(mongoosePath) && fs.existsSync(appMongoosePath)) {
       fs.removeSync(appMongoosePath);
       fs.symlinkSync(mongoosePath, appMongoosePath);
     }
