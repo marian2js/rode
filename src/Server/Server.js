@@ -155,9 +155,9 @@ export class Server {
         pattern = pattern.substring(0, pattern.length - 1);
       }
 
-      // If call is an array, the firsts items are middlewares
-      if (Array.isArray(call)) {
-        var middlewares = call;
+      // If call has not arguments, should be a function with middlewares
+      if (!call.length) {
+        var middlewares = call();
         call = middlewares.pop();
         this.app[route.method.toLowerCase()](pattern || '/', ...middlewares);
       }
