@@ -1,8 +1,9 @@
+import { Model } from 'rode/loader';
 
 /**
  * {{ model | capitalize }} Model
  */
-export class {{ model | capitalize }} {
+export class {{ model | capitalize }} extends Model {
 
   /**
    * Sample method, converts a string to upper case
