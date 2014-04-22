@@ -1,6 +1,6 @@
 export class Package2Controller {
 
-  get index() {
+  index() {
     return [
       // Middleware
       (req, res, next) => {
