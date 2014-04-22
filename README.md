@@ -74,7 +74,9 @@ You can simply create a new package with the command:
 In a model you should add all your business logic:
 
 ```js
-export class MyModel {
+import { Model } from 'rode/loader';
+
+export class MyModel extends Model {
 
   /**
    * Sample method, converts a string to upper case
