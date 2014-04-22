@@ -7,6 +7,7 @@ import { Router } from './src/Router/Router';
 import { List } from './src/Util/List';
 import { Template } from './src/Util/Template';
 import { Observable } from './src/MVC/Observable';
+import { Model } from './src/MVC/Model';
 import { ViewEngine } from './src/MVC/ViewEngine';
 import { InvalidParamsError } from './src/Error/InvalidParamsError';
 import { FileExistsError } from './src/Error/FileExistsError';
@@ -32,6 +33,7 @@ export {Router};
 export {List};
 export {Template};
 export {Observable};
+export {Model};
 export {ViewEngine};
 
 // export common errors
