@@ -7,7 +7,7 @@
     "{{ css }}": "*",
     "traceur": "0.0.32",
     "es6-shim": "0.10.x",
-    "es6-module-loader": "0.5.x",
+    "es6-module-loader": "0.6.x",
     "prfun": "0.1.x"
   },
   "devDependencies": {
