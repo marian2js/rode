@@ -77,17 +77,16 @@ export class Server {
     }
 
     // Config CSS
-    switch (config.css) {
+    switch (config.get('css')) {
       case 'less':
         this.app.use(require('less-middleware')(
-            this.getPath('statics'),
-            {
-              compress: core.env === 'production'
-            }
+          core.getPath('statics'), {
+            compress: core.env === 'production'
+          }
         ));
         break;
       case 'stylus':
-        this.app.use(require('stylus').middleware(this.getPath('statics')));
+        this.app.use(require('stylus').middleware(core.getPath('statics')));
     }
 
     // Config Statics
