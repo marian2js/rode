@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+import { Model } from 'rode/loader';
 
 /***********************************
  * NOTE:
@@ -9,24 +10,10 @@ var mongoose = require('mongoose');
 /**
  * Post Model
  */
-export class Post {
+export class Post extends Model {
 
-  constructor(obj) {
-    this._loadObject(obj);
-  }
-
-  /**
-   * Load an object on the model
-   *
-   * @param obj
-   * @private
-   */
-  _loadObject(obj) {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        this[key] = obj[key];
-      }
-    }
+  constructor(data) {
+    super(data);
   }
 
   /**
@@ -50,6 +37,20 @@ export class Post {
         resolve();
       });
     });
+  }
+
+  /**
+   * Load an object on the model
+   *
+   * @param obj
+   * @private
+   */
+  _loadObject(obj) {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        this[key] = obj[key];
+      }
+    }
   }
 
   /**
